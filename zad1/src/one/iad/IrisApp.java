@@ -7,10 +7,12 @@ public class IrisApp {
 
     public static void main(String[] args) {
 
-        IrisData.readData("iris.data");
+        IrisData.readData("data/iris.data");
         
-        getResults("iris.data", ",");
-        getResults("Iris-setosa.data", "\t");
+        getResults("data/iris.data", ",");
+        getResults("data/Iris-setosa.data", "\t");
+        getResults("data/Iris-virginica.data", "\t");
+        getResults("data/Iris-versicolor.data", "\t");
 
     }
 

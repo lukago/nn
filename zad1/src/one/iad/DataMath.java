@@ -30,13 +30,9 @@ public class DataMath {
         list.sort(null);
         double n = list.size() * percentage / 100.0;
         int n1 = (int) Math.floor(n);
-        int n2 = (int) Math.ceil(n);
+        int n2 = n1 + 1;
 
-        if (n1 == n2) {
-            return list.get(n1);
-        }
-
-        return (list.get(n1) + list.get(n2)) / 2;
+        return (list.get(n1) * (n2 - n) + list.get(n2) * (n - n1));
     }
 
     public static double powerMean(ArrayList<Double> list, double p) {

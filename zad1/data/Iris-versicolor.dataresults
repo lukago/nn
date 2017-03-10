@@ -1,0 +1,27 @@
+data/Iris-versicolor.data
+sep len 	sep wid 	pen len 	pen wid
+
+max:
+7,00		3,40		5,10		1,80		
+min:
+4,90		2,00		3,00		1,00		
+range:
+2,10		1,40		2,10		0,80		
+1st quartile:
+5,60		2,55		4,00		1,20		
+2nd quartile:
+5,90		2,80		4,40		1,30		
+3rd quartile:
+6,30		3,00		4,60		1,50		
+harmonic mean:
+5,89		2,73		4,20		1,30		
+geometric mean:
+5,91		2,75		4,23		1,31		
+arithmetic mean:
+5,94		2,77		4,26		1,33		
+variance:
+0,26		0,10		0,22		0,04		
+standard deviation:
+0,51		0,31		0,47		0,20		
+kurtosis:
+-0,60		-0,45		-0,07		-0,49		

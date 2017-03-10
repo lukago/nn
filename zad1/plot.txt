@@ -1,4 +1,0 @@
-cd 'C:\Users\Admin\studbaza\rok2\2sem\IAD\zad1\'
-plot 'Iris-setosa.data' using 1:2
-replot 'Iris-versicolor.data' using 1:2
-replot 'Iris-virginica.data' using 1:2

@@ -20,7 +20,7 @@ public class IrisData {
                 String[] row = line.split(",");   
                 String data = row[0]+"\t"+row[1]+"\t"+row[2]+"\t"+row[3];
 
-                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(row[4]+".data", true)));
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("data/"+row[4]+".data", true)));
                 out.println(data);
                 out.close();
                
