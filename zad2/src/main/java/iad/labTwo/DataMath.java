@@ -1,10 +1,10 @@
 package iad.labTwo;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DataMath {
 
-	public static double max(ArrayList<Double> list) {
+	public static double max(List<Double> list) {
 		double max = list.get(0);
 		for (Double i : list) {
 			if (i > max)
@@ -13,7 +13,7 @@ public class DataMath {
 		return max;
 	}
 
-	public static double min(ArrayList<Double> list) {
+	public static double min(List<Double> list) {
 		double min = list.get(0);
 		for (Double i : list) {
 			if (i < min)
@@ -22,11 +22,11 @@ public class DataMath {
 		return min;
 	}
 
-	public static double range(ArrayList<Double> list) {
+	public static double range(List<Double> list) {
 		return max(list) - min(list);
 	}
 
-	public static double quartile(ArrayList<Double> list, int percentage) {
+	public static double quartile(List<Double> list, int percentage) {
 		list.sort(null);
 		double n = list.size() * percentage / 100.0;
 		int n1 = (int) Math.floor(n);
@@ -35,7 +35,7 @@ public class DataMath {
 		return (list.get(n1) * (n2 - n) + list.get(n2) * (n - n1));
 	}
 
-	public static double powerMean(ArrayList<Double> list, double p) {
+	public static double powerMean(List<Double> list, double p) {
 		double sum = 0;
 
 		for (Double i : list) {
@@ -45,15 +45,15 @@ public class DataMath {
 		return Math.pow(sum / list.size(), 1 / p);
 	}
 
-	public static double harmonicMean(ArrayList<Double> list) {
+	public static double harmonicMean(List<Double> list) {
 		return powerMean(list, -1);
 	}
 
-	public static double arithmeticMean(ArrayList<Double> list) {
+	public static double arithmeticMean(List<Double> list) {
 		return powerMean(list, 1);
 	}
 
-	public static double geometricMean(ArrayList<Double> list) {
+	public static double geometricMean(List<Double> list) {
 		double sum = 0;
 
 		for (Double i : list) {
@@ -63,7 +63,7 @@ public class DataMath {
 		return Math.exp(sum / list.size());
 	}
 
-	public static double variance(ArrayList<Double> list) {
+	public static double variance(List<Double> list) {
 		double sum = 0;
 		double avg = arithmeticMean(list);
 
@@ -74,11 +74,11 @@ public class DataMath {
 		return sum / list.size();
 	}
 
-	public static double standardDeviation(ArrayList<Double> list) {
+	public static double standardDeviation(List<Double> list) {
 		return Math.sqrt(variance(list));
 	}
 
-	public static double kurtosis(ArrayList<Double> list) {
+	public static double kurtosis(List<Double> list) {
 		double sum = 0;
 		double avg = arithmeticMean(list);
 
