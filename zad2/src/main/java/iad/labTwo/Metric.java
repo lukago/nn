@@ -2,7 +2,9 @@ package iad.labTwo;
 
 import java.util.List;
 
-public class Metric {
+public final class Metric {
+	
+	private Metric() { }
 
 	public static double taxicab(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 1);
@@ -45,8 +47,7 @@ public class Metric {
 			normB += b.get(i) * b.get(i);
 		}
 
-		double similarity = dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-		return Math.acos(similarity) / Math.PI;
+		return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 	}
 
 	private static void check(List<Double> a, List<Double> b) {

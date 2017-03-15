@@ -7,8 +7,9 @@ public class DataMath {
 	public static double max(List<Double> list) {
 		double max = list.get(0);
 		for (Double i : list) {
-			if (i > max)
+			if (i > max) {
 				max = i;
+			}
 		}
 		return max;
 	}
@@ -16,8 +17,9 @@ public class DataMath {
 	public static double min(List<Double> list) {
 		double min = list.get(0);
 		for (Double i : list) {
-			if (i < min)
+			if (i < min) {
 				min = i;
+			}
 		}
 		return min;
 	}

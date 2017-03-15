@@ -18,9 +18,11 @@ public class IrisData {
 
 			/* delete files if exist */
 			File directory = new File("data/");
-			for (File f : directory.listFiles())
-				if (f.getName().startsWith("Iris-"))
+			for (File f : directory.listFiles()) {
+				if (f.getName().startsWith("Iris-")) {
 					f.delete();
+				}
+			}
 
 			while (line != null) {
 				String[] row = line.split(",");
@@ -98,7 +100,7 @@ public class IrisData {
 		try {
 			lnr = new LineNumberReader(new FileReader(new File(filename)));
 			lnr.skip(Long.MAX_VALUE);
-			lnr.close();		
+			lnr.close();
 		} catch (FileNotFoundException fnfe) {
 			System.out.println("file not found");
 		} catch (IOException ioe) {
@@ -106,5 +108,4 @@ public class IrisData {
 		}
 		return lnr.getLineNumber();
 	}
-
 }
