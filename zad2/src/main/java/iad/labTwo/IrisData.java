@@ -163,7 +163,7 @@ public final class IrisData {
 		bw.close();
 	}
 	
-	public static List<List<Double>> calcPoints(String filename) throws IOException {
+	public static List<List<Double>> calcPoints(String filename, int n) throws IOException {
 		List<List<Double>> irisPoints = new ArrayList<List<Double>>();
 		List<Double> avgs = new ArrayList<Double>();
 		List<Double> sds = new ArrayList<Double>();
@@ -174,7 +174,7 @@ public final class IrisData {
 			sds.add(DataMath.standardDeviation(IrisData.getColumn(i, filename, ",")));
 		}
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < n; i++) {
 			irisPoints.add(Arrays.asList(r.nextGaussian() * sds.get(0) + avgs.get(0),
 					r.nextGaussian() * sds.get(1) + avgs.get(1), r.nextGaussian() * sds.get(2) + avgs.get(2),
 					r.nextGaussian() * sds.get(3) + avgs.get(3)));
