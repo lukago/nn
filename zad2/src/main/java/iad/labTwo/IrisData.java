@@ -21,6 +21,8 @@ import java.util.Random;
 public final class IrisData {
 	
 	private IrisData() { }
+	
+	private static final int features = 4;
 
 	public static void initData(String filename) throws IOException {
 		BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -75,7 +77,7 @@ public final class IrisData {
 
 		if (line != null) {
 			String[] rowStr = line.split(separator);
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < features; i++) {
 				row.add(Double.parseDouble(rowStr[i]));
 			}
 		}
@@ -118,7 +120,7 @@ public final class IrisData {
 
 	public static void calcResults(String filename, String sep, List<List<Double>> ip, String metric)
 			throws IOException {
-		Double[] tab = new Double[3];
+		List<Double> tab = new ArrayList<Double>();
 		double min = 0;
 		String line = null;
 		FileInputStream fstream = new FileInputStream(filename);
@@ -128,32 +130,32 @@ public final class IrisData {
 
 		// min distance for each row
 		for (int i = 0; i < IrisData.getFileRowsNum(filename); i++) {
-			for (int j = 0; j < 3; j++) {
+			for (int j = 0; j < ip.size(); j++) {
 				switch (metric) {
 				case "taxicab":
-					tab[j] = Metric.taxicab(ip.get(j), IrisData.getRow(i, filename, sep));
+					tab.add(Metric.taxicab(ip.get(j), IrisData.getRow(i, filename, sep)));
 					break;
 				case "euclidean":
-					tab[j] = Metric.euclidean(ip.get(j), IrisData.getRow(i, filename, sep));
+					tab.add(Metric.euclidean(ip.get(j), IrisData.getRow(i, filename, sep)));
 					break;
 				case "minkowski":
-					tab[j] = Metric.minkowski(ip.get(j), IrisData.getRow(i, filename, sep), 3);
+					tab.add(Metric.minkowski(ip.get(j), IrisData.getRow(i, filename, sep), 3));
 					break;
 				case "chebyshev":
-					tab[j] = Metric.chebyshev(ip.get(j), IrisData.getRow(i, filename, sep));
+					tab.add(Metric.chebyshev(ip.get(j), IrisData.getRow(i, filename, sep)));
 					break;
 				case "cosine":
-					tab[j] = Metric.cosineSimilarity(ip.get(j), IrisData.getRow(i, filename, sep));
+					tab.add(Metric.cosineSimilarity(ip.get(j), IrisData.getRow(i, filename, sep)));
 					break;
 				default:
 					throw new IllegalArgumentException();
 				}
 			}
-			min = DataMath.min((Arrays.asList(tab)));
+			min = DataMath.min(tab);
 			line = br.readLine();
-			if (min == tab[0]) {
+			if (min == tab.get(0)) {
 				bw.write(line + sep + "0.0\n");
-			} else if (min == tab[1]) {
+			} else if (min == tab.get(1)) {
 				bw.write(line + sep + "1.0\n");
 			} else {
 				bw.write(line + sep + "2.0\n");
@@ -187,7 +189,7 @@ public final class IrisData {
 		List<Double> maxes = new ArrayList<Double>();
 		double max, max1, max2;
 		
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < features; i++) {
 			max1 = DataMath.max(IrisData.getColumn(i, "data/iris.data", ","));
 			max2 = DataMath.max(IrisData.getColumn(i, "results_data/points", "\t"));
 			max = max1>max2 ? max1 : max2;

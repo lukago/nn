@@ -1,6 +1,6 @@
 titles = "'euclidean' 'minkowski' 'taxicab' 'chebyshev' 'cosine'"
 
-set palette defined ( 0 "#02C800", 1 "#FF0000", 2 "#0000FF")
+#set palette defined ( 0 "#02C800", 1 "#FF0000", 2 "#0000FF")
 set key font ",10"
 set term png
 #set xrange [0:1]
