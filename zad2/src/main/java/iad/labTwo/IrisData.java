@@ -35,6 +35,7 @@ public final class IrisData {
 			}
 		}
 
+		new File("results_data/").mkdir();
 		directory = new File("results_data/");
 		for (File f : directory.listFiles()) {
 			f.delete();

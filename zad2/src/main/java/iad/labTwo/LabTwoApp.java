@@ -9,7 +9,7 @@ public class LabTwoApp {
 
 		try {
 			IrisData.initData("data/iris.data");
-			List<List<Double>> irisPoints = IrisData.calcPoints("data/iris.data", 12);
+			List<List<Double>> irisPoints = IrisData.calcPoints("data/iris.data", 3);
 			IrisData.writePoints(irisPoints, "results_data/points");		
 			List<Double> maxes = IrisData.calcMaxes();
 			
