@@ -9,7 +9,7 @@ public class LabTwoApp {
 
 		try {
 			IrisData.initData("data/iris.data");
-			List<List<Double>> irisPoints = IrisData.calcPoints("data/iris.data", 1000);
+			List<List<Double>> irisPoints = IrisData.calcPoints("data/iris.data", 12);
 			IrisData.writePoints(irisPoints, "results_data/points");		
 			List<Double> maxes = IrisData.calcMaxes();
 			
@@ -31,8 +31,8 @@ public class LabTwoApp {
 			}
 			IrisData.normalize("results_data/points", "\t", maxes);
 
-			/*final Runtime rt = Runtime.getRuntime();
-			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot.txt");*/	
+			final Runtime rt = Runtime.getRuntime();
+			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot.txt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

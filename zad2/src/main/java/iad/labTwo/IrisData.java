@@ -127,25 +127,28 @@ public final class IrisData {
 		File file = new File("results_" + filename + "_" + metric);
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
-
+		List<Double> rowVec = new ArrayList<Double>();
+		
 		// min distance for each row
 		for (int i = 0; i < IrisData.getFileRowsNum(filename); i++) {
+			rowVec = IrisData.getRow(i, filename, sep);
+			tab = new ArrayList<Double>();
 			for (int j = 0; j < ip.size(); j++) {
 				switch (metric) {
 				case "taxicab":
-					tab.add(Metric.taxicab(ip.get(j), IrisData.getRow(i, filename, sep)));
+					tab.add(Metric.taxicab(ip.get(j), rowVec));
 					break;
 				case "euclidean":
-					tab.add(Metric.euclidean(ip.get(j), IrisData.getRow(i, filename, sep)));
+					tab.add(Metric.euclidean(ip.get(j), rowVec));
 					break;
 				case "minkowski":
-					tab.add(Metric.minkowski(ip.get(j), IrisData.getRow(i, filename, sep), 3));
+					tab.add(Metric.minkowski(ip.get(j), rowVec, 3));
 					break;
 				case "chebyshev":
-					tab.add(Metric.chebyshev(ip.get(j), IrisData.getRow(i, filename, sep)));
+					tab.add(Metric.chebyshev(ip.get(j), rowVec));
 					break;
 				case "cosine":
-					tab.add(Metric.cosineSimilarity(ip.get(j), IrisData.getRow(i, filename, sep)));
+					tab.add(Metric.cosineSimilarity(ip.get(j), rowVec));
 					break;
 				default:
 					throw new IllegalArgumentException();
@@ -153,12 +156,11 @@ public final class IrisData {
 			}
 			min = DataMath.min(tab);
 			line = br.readLine();
-			if (min == tab.get(0)) {
-				bw.write(line + sep + "0.0\n");
-			} else if (min == tab.get(1)) {
-				bw.write(line + sep + "1.0\n");
-			} else {
-				bw.write(line + sep + "2.0\n");
+			for(int j = 0; j<tab.size(); j++) {
+				if (min == tab.get(j)) {
+					bw.write(line + sep + j+".0\n");
+					break;
+				}
 			}
 		}
 		br.close();
