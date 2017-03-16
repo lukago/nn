@@ -1,6 +1,8 @@
 ## Other
 android/assets/data/*
-plan.JPG
+results_data/
+plots/
+
 
 ## Java
 *.class
