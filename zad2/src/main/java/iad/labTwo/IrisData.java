@@ -19,9 +19,10 @@ import java.util.List;
 import java.util.Random;
 
 public final class IrisData {
-	
-	private IrisData() { }
-	
+
+	private IrisData() {
+	}
+
 	private static final int features = 4;
 
 	public static void initData(String filename) throws IOException {
@@ -87,24 +88,39 @@ public final class IrisData {
 		return row;
 	}
 
-	public static void normalize(String filename, String sep, List<Double> maxes) throws IOException {
+	public static void normalize(String filename, String sep, boolean renormalize, List<Double> sds)
+			throws IOException {
+
 		List<String> newLines = new ArrayList<>();
+		String str = "";
 		for (String line : Files.readAllLines(Paths.get(filename), StandardCharsets.UTF_8)) {
 			String[] row = line.split(sep);
-			String newLine = "";
-			double[] dArray = new double[maxes.size()];
+			double[] dArray = new double[sds.size()];
 			for (int i = 0; i < dArray.length; i++) {
-				dArray[i] = Double.parseDouble(row[i]) / maxes.get(i);
-				newLine += Double.toString(dArray[i]) + sep;
+				if (renormalize) {
+					dArray[i] = Double.parseDouble(row[i]) * sds.get(i);
+				} else {
+					dArray[i] = Double.parseDouble(row[i]) / sds.get(i);
+				}
+				row[i] = Double.toString(dArray[i]) + sep;
+				str += row[i];
 			}
-			newLines.add(newLine);
+			for (int i = 0; i < (row.length - sds.size()); i++) {
+				str += row[dArray.length + i] + sep;
+			}
+			newLines.add(str);
+			str = "";
 		}
 		Files.write(Paths.get(filename), newLines, StandardCharsets.UTF_8);
-
 	}
 
-	public static void normalizeRes(String filename, String sep, List<Double> maxes, String metric) throws IOException {
-		normalize("results_" + filename + "_" + metric, sep, maxes);
+	public static List<Double> calcSds(String filename, String sep) throws IOException {
+		List<Double> sds = new ArrayList<Double>();
+		for (int i = 0; i < 4; i++) {
+			sds.add(DataMath.standardDeviation(getColumn(i, filename, sep)));
+		}
+
+		return sds;
 	}
 
 	public static void writePoints(List<List<Double>> ip, String filename) throws IOException {
@@ -129,7 +145,7 @@ public final class IrisData {
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 		List<Double> rowVec = new ArrayList<Double>();
-		
+
 		// min distance for each row
 		for (int i = 0; i < IrisData.getFileRowsNum(filename); i++) {
 			rowVec = IrisData.getRow(i, filename, sep);
@@ -157,9 +173,9 @@ public final class IrisData {
 			}
 			min = DataMath.min(tab);
 			line = br.readLine();
-			for(int j = 0; j<tab.size(); j++) {
+			for (int j = 0; j < tab.size(); j++) {
 				if (min == tab.get(j)) {
-					bw.write(line + sep + j+".0\n");
+					bw.write(line + sep + j + ".0\n");
 					break;
 				}
 			}
@@ -167,16 +183,16 @@ public final class IrisData {
 		br.close();
 		bw.close();
 	}
-	
-	public static List<List<Double>> calcPoints(String filename, int n) throws IOException {
+
+	public static List<List<Double>> calcPoints(String filename, String sep, int n) throws IOException {
 		List<List<Double>> irisPoints = new ArrayList<List<Double>>();
 		List<Double> avgs = new ArrayList<Double>();
 		List<Double> sds = new ArrayList<Double>();
 		Random r = new Random();
 
 		for (int i = 0; i < 4; i++) {
-			avgs.add(DataMath.arithmeticMean(IrisData.getColumn(i, filename, ",")));
-			sds.add(DataMath.standardDeviation(IrisData.getColumn(i, filename, ",")));
+			avgs.add(DataMath.arithmeticMean(IrisData.getColumn(i, filename, sep)));
+			sds.add(DataMath.standardDeviation(IrisData.getColumn(i, filename, sep)));
 		}
 
 		for (int i = 0; i < n; i++) {
@@ -184,26 +200,10 @@ public final class IrisData {
 					r.nextGaussian() * sds.get(1) + avgs.get(1), r.nextGaussian() * sds.get(2) + avgs.get(2),
 					r.nextGaussian() * sds.get(3) + avgs.get(3)));
 		}
-		
+
 		return irisPoints;
 	}
-	
-	public static List<Double> calcMaxes() throws IOException {
-		List<Double> maxes = new ArrayList<Double>();
-		double max, max1, max2;
-		
-		for (int i = 0; i < features; i++) {
-			max1 = DataMath.max(IrisData.getColumn(i, "data/iris.data", ","));
-			max2 = DataMath.max(IrisData.getColumn(i, "results_data/points", "\t"));
-			max = max1>max2 ? max1 : max2;
-			maxes.add(max);
-		}		
-		double maxSep = DataMath.max(maxes.subList(0, 1));
-		double maxPen = DataMath.max(maxes.subList(2, 3));
-		
-		return Arrays.asList(maxSep, maxSep, maxPen, maxPen, 1.0);
-	}
-	
+
 	public static int getFileRowsNum(String filename) throws IOException {
 		LineNumberReader lnr = null;
 		lnr = new LineNumberReader(new FileReader(new File(filename)));

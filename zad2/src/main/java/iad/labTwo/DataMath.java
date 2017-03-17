@@ -3,8 +3,9 @@ package iad.labTwo;
 import java.util.List;
 
 public final class DataMath {
-	
-	private DataMath() { }
+
+	private DataMath() {
+	}
 
 	public static double max(List<Double> list) {
 		double max = list.get(0);
