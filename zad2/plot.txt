@@ -3,15 +3,15 @@ titles = "'euclidean' 'minkowski' 'taxicab' 'chebyshev' 'cosine'"
 set palette defined ( 0 "#02C800", 1 "#FF0000", 2 "#0000FF")
 set key font ",10"
 set term png
-#set xrange [-3:13]
-#set yrange [-3:13]
+#set xrange [-3:13];
+#set yrange [-3:13];
 unset colorbox
 
 system "mkdir plots"
 
 do for [i = 1 : words(titles)] {
 	set output 'plots/plot_sepal_'.word(titles, i).'.png'
-	set title 'iris sepal '.word(titles, i)
+	set title 'iris sepal '.word(titles, i).' metric'
 
 	plot 	'results_data/Iris-setosa.data_'.word(titles, i) using 1:2:5 with points palette pt 1,\
 			'results_data/Iris-versicolor.data_'.word(titles, i) using 1:2:5 with points palette pt 2,\
@@ -19,7 +19,7 @@ do for [i = 1 : words(titles)] {
 			'results_data/points' using 1:2:5 with points palette pt 7 ps 1.5			
 			
 	set output 'plots/plot_pental_'.word(titles, i).'.png'
-	set title 'iris pental '.word(titles, i)
+	set title 'iris pental '.word(titles, i).' metric'
 	
 	plot 	'results_data/Iris-setosa.data_'.word(titles, i) using 3:4:5 with points palette pt 1,\
 			'results_data/Iris-versicolor.data_'.word(titles, i) using 3:4:5 with points palette pt 2,\
