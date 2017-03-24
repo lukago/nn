@@ -165,7 +165,7 @@ public final class IrisData {
 					tab.add(Metric.chebyshev(ip.get(j), rowVec));
 					break;
 				case "cosine":
-					tab.add(Metric.cosineSimilarity(ip.get(j), rowVec));
+					tab.add(-Metric.cosineSimilarity(ip.get(j), rowVec));
 					break;
 				default:
 					throw new IllegalArgumentException();
