@@ -21,11 +21,11 @@ public class LabTwoApp {
 			IrisData.writePoints(irisPoints, "results_data/points");
 				
 			for (String s : names) {
-				IrisData.calcResults(s, "\t", irisPoints, metrics[0]);
-				IrisData.calcResults(s, "\t", irisPoints, metrics[1]);
-				IrisData.calcResults(s, "\t", irisPoints, metrics[2]);
-				IrisData.calcResults(s, "\t", irisPoints, metrics[3]);
-				IrisData.calcResults(s, "\t", irisPoints, metrics[4]);
+				IrisData.calcResults(s, "\t", irisPoints, Metric::taxicab, metrics[0]);
+				IrisData.calcResults(s, "\t", irisPoints, Metric::euclidean, metrics[1]);
+				IrisData.calcResults(s, "\t", irisPoints, Metric::minkowski3p, metrics[2]);
+				IrisData.calcResults(s, "\t", irisPoints, Metric::chebyshev, metrics[3]);
+				IrisData.calcResults(s, "\t", irisPoints, Metric::cosineSimilarity, metrics[4]);
 			}
 			
 			IrisData.normalize("data/iris.data", ",", true, sds);

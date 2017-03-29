@@ -13,6 +13,10 @@ public final class Metric {
 	public static double euclidean(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 2);
 	}
+	
+	public static double minkowski3p(List<Double> a, List<Double> b) {
+		return minkowski(a, b, 3);
+	}
 
 	public static double minkowski(List<Double> a, List<Double> b, int p) {
 		check(a, b);

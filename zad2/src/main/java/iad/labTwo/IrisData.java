@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.ToDoubleBiFunction;
 
 public final class IrisData {
 
@@ -135,13 +136,13 @@ public final class IrisData {
 		wr.close();
 	}
 
-	public static void calcResults(String filename, String sep, List<List<Double>> ip, String metric)
-			throws IOException {
+	public static void calcResults(String filename, String sep, List<List<Double>> ip, 
+			ToDoubleBiFunction<List<Double>, List<Double>> metric, String metricName) throws IOException {
 		List<Double> tab = new ArrayList<Double>();
 		double min = 0;
 		String line = null;
 		FileInputStream fstream = new FileInputStream(filename);
-		File file = new File("results_" + filename + "_" + metric);
+		File file = new File("results_" + filename + "_" + metricName);
 		BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
 		BufferedWriter bw = new BufferedWriter(new FileWriter(file, true));
 		List<Double> rowVec = new ArrayList<Double>();
@@ -151,25 +152,7 @@ public final class IrisData {
 			rowVec = IrisData.getRow(i, filename, sep);
 			tab = new ArrayList<Double>();
 			for (int j = 0; j < ip.size(); j++) {
-				switch (metric) {
-				case "taxicab":
-					tab.add(Metric.taxicab(ip.get(j), rowVec));
-					break;
-				case "euclidean":
-					tab.add(Metric.euclidean(ip.get(j), rowVec));
-					break;
-				case "minkowski":
-					tab.add(Metric.minkowski(ip.get(j), rowVec, 3));
-					break;
-				case "chebyshev":
-					tab.add(Metric.chebyshev(ip.get(j), rowVec));
-					break;
-				case "cosine":
-					tab.add(-Metric.cosineSimilarity(ip.get(j), rowVec));
-					break;
-				default:
-					throw new IllegalArgumentException();
-				}
+				tab.add(metric.applyAsDouble(ip.get(j), rowVec));
 			}
 			min = DataMath.min(tab);
 			line = br.readLine();
