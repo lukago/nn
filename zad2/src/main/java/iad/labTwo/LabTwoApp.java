@@ -1,7 +1,6 @@
 package iad.labTwo;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.io.IOException;
 
@@ -19,9 +18,7 @@ public class LabTwoApp {
 			
 			IrisData.initData("data/iris.data");
 			List<List<Double>> irisPoints = IrisData.calcPoints("data/iris.data", ",", 3);
-			Collections.shuffle(irisPoints);
 			IrisData.writePoints(irisPoints, "results_data/points");
-			System.out.println("");
 				
 			for (String s : names) {
 				IrisData.calcResults(s, "\t", irisPoints, metrics[0]);
@@ -31,14 +28,13 @@ public class LabTwoApp {
 				IrisData.calcResults(s, "\t", irisPoints, metrics[4]);
 			}
 			
-			/*IrisData.normalize("data/iris.data", ",", true, sds);
+			IrisData.normalize("data/iris.data", ",", true, sds);
 			for (String s : metrics) { 
 				IrisData.normalize("results_data/Iris-setosa.data_"+s, "\t", true, sds);
 				IrisData.normalize("results_data/Iris-virginica.data_"+s, "\t", true, sds);
 				IrisData.normalize("results_data/Iris-versicolor.data_"+s, "\t", true, sds);
 			}
-			IrisData.normalize("results_data/points", "\t", true, sds);*/
-			
+			IrisData.normalize("results_data/points", "\t", true, sds);
 
 			final Runtime rt = Runtime.getRuntime();
 			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot.txt");

@@ -165,7 +165,7 @@ public final class IrisData {
 					tab.add(Metric.chebyshev(ip.get(j), rowVec));
 					break;
 				case "cosine":
-					tab.add(Metric.cosineSimilarity(ip.get(j), rowVec));
+					tab.add(-Metric.cosineSimilarity(ip.get(j), rowVec));
 					break;
 				default:
 					throw new IllegalArgumentException();
@@ -196,9 +196,10 @@ public final class IrisData {
 		}
 
 		for (int i = 0; i < n; i++) {
-			irisPoints.add(Arrays.asList(r.nextGaussian() * sds.get(0) + avgs.get(0),
-					r.nextGaussian() * sds.get(1) + avgs.get(1), r.nextGaussian() * sds.get(2) + avgs.get(2),
-					r.nextGaussian() * sds.get(3) + avgs.get(3)));
+			irisPoints.add(Arrays.asList(Math.abs(r.nextGaussian() * sds.get(0) + avgs.get(0)),
+					Math.abs(r.nextGaussian() * sds.get(1) + avgs.get(1)),
+					Math.abs(r.nextGaussian() * sds.get(2) + avgs.get(2)),
+					Math.abs(r.nextGaussian() * sds.get(3) + avgs.get(3))));
 		}
 
 		return irisPoints;
