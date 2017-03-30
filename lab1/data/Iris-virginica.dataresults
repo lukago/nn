@@ -1,0 +1,27 @@
+data/Iris-virginica.data
+sep len 	sep wid 	pen len 	pen wid
+
+max:
+7,90		3,80		6,90		2,50		
+min:
+4,90		2,20		4,50		1,40		
+range:
+3,00		1,60		2,40		1,10		
+1st quartile:
+6,20		2,80		5,10		1,80		
+2nd quartile:
+6,50		3,00		5,60		2,00		
+3rd quartile:
+6,90		3,20		5,90		2,30		
+harmonic mean:
+6,53		2,94		5,50		1,99		
+geometric mean:
+6,56		2,96		5,53		2,01		
+arithmetic mean:
+6,59		2,97		5,55		2,03		
+variance:
+0,40		0,10		0,30		0,07		
+standard deviation:
+0,63		0,32		0,55		0,27		
+kurtosis:
+-0,09		0,52		-0,26		-0,66		

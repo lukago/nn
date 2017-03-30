@@ -1,5 +1,4 @@
-package iad.zad3;
-
+package iad.task1;
 
 import java.util.List;
 

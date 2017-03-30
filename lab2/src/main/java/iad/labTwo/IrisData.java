@@ -120,7 +120,6 @@ public final class IrisData {
 		for (int i = 0; i < 4; i++) {
 			sds.add(DataMath.standardDeviation(getColumn(i, filename, sep)));
 		}
-
 		return sds;
 	}
 

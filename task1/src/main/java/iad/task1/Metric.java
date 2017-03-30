@@ -1,4 +1,4 @@
-package iad.zad3;
+package iad.task1;
 
 import java.util.List;
 
@@ -13,6 +13,10 @@ public final class Metric {
 	public static double euclidean(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 2);
 	}
+	
+	public static double minkowski3p(List<Double> a, List<Double> b) {
+		return minkowski(a, b, 3);
+	}
 
 	public static double minkowski(List<Double> a, List<Double> b, int p) {
 		check(a, b);
@@ -26,8 +30,8 @@ public final class Metric {
 	public static double chebyshev(List<Double> a, List<Double> b) {
 		check(a, b);
 		double distance = 0;
-		double max = 0;
-		for (int i = 0; i < a.size(); i++) {
+		double max = Math.abs(a.get(0) - b.get(0));
+		for (int i = 1; i < a.size(); i++) {
 			distance = Math.abs(a.get(i) - b.get(i));
 			if (distance > max) {
 				max = distance;
