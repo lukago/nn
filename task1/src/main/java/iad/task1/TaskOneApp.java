@@ -4,9 +4,8 @@ public class TaskOneApp {
 
 	public static void main(String[] args) {
 		
-		System.out.println("Hello world!");
-		KMeans km = new KMeans(5, 2, "data/sample1.data", "\t");
-		km.calc();
+		KMeans km = new KMeans(4, 2, "data/sample2.data", "\t");
+		km.calc(300);
 
 	}
 

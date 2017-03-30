@@ -2,10 +2,9 @@ package iad.task1;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
 
 public class KMeans {
 
@@ -14,9 +13,10 @@ public class KMeans {
 	private String filepath;
 	private String separator;
 	private List<List<Double>> kPoints;
+	private List<Integer> indexes;
 
 	private final String destDir = "results_kmeans/";
-	private final String destFile = "kmeans.data_";
+	private final String destFile = "kmeans.data";
 
 	public KMeans(int kPointsNum, int dimensions, String filepath, String separator) {
 		this.kPointsNum = kPointsNum;
@@ -24,8 +24,10 @@ public class KMeans {
 		this.filepath = filepath;
 		this.separator = separator;
 		kPoints = new ArrayList<List<Double>>();
+		indexes = new ArrayList<Integer>();
 
 		FileHandler.makeEmptyDir(destDir);
+		FileHandler.copy(filepath, destDir + destFile);
 	}
 
 	public void initKPoints() {
@@ -40,83 +42,111 @@ public class KMeans {
 		}
 
 		for (int i = 0; i < kPointsNum; i++) {
-			tmp = new ArrayList<Double>();
 			for (int j = 0; j < dimensions; j++) {
 				tmp.add(r.nextGaussian() * sds.get(j) + avgs.get(j));
 			}
-			kPoints.add(tmp);		
+			kPoints.add(tmp);
+			tmp = new ArrayList<Double>();
 		}
 
 		FileHandler.writeMatrix(kPoints, destDir + "points");
 	}
 
 	/**
-	 * @return vector of indexes to closest kp for each data point
+	 * Calc vector of indexes to closest kp for each data point
 	 */
-	public void writeMinDistPoints() {
+	private void writeMinDistPoints() {
 		List<Double> rowVec = new ArrayList<Double>();
 		List<Double> distsToKPs = new ArrayList<Double>();
-		String line = null;
+		indexes = new ArrayList<Integer>();
 
 		for (int i = 0; i < FileHandler.getFileRowsNum(filepath); i++) {
 			rowVec = FileHandler.getRow(i, filepath, separator);
 
 			// create array with distances to each kp for one data point
 			distsToKPs = new ArrayList<Double>();
-			for (int j = 0; j < kPoints.size(); j++) {
+			for (int j = 0; j < kPointsNum; j++) {
 				distsToKPs.add(Metric.euclidean(kPoints.get(j), rowVec));
 			}
 
 			// get index of min from created array and add it to returned vector
 			double min = DataMath.min(distsToKPs);
-			line = String.join("\t", rowVec.stream().map(o -> o.toString()).collect(Collectors.toList()));
 			for (int j = 0; j < distsToKPs.size(); j++) {
 				if (min == distsToKPs.get(j)) {
-					FileHandler.appendLine(destDir + destFile + j, line + "\t" + j + "\n");
+					indexes.add(j);
 					break;
 				}
 			}
 		}
+		
+		if(indexes.size() == 0 ) {
+			writeMinDistPoints();
+		}
+		
+		FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
 	}
 
-	public void recalcKPoints() {
+	private void recalcKPoints() {
 		List<List<Double>> newKPoints = new ArrayList<List<Double>>();
+		List<Double> tmpPoint = new ArrayList<Double>();
+		List<Double> colKp = new ArrayList<Double>();
+		List<Double> colAll = new ArrayList<Double>();
+		int nullPoints = 0;
 
 		for (int i = 0; i < kPointsNum; i++) {
-			newKPoints.add(Arrays.asList(
-					DataMath.arithmeticMean(FileHandler.getColumn(0, destDir + destFile + i, separator)),
-					DataMath.arithmeticMean(FileHandler.getColumn(1, destDir + destFile + i, separator))));
+			tmpPoint = new ArrayList<Double>();
+
+			for (int j = 0; j < dimensions; j++) {
+				colKp = new ArrayList<Double>();
+				colAll = FileHandler.getColumn(j, destDir + destFile, separator);
+
+				for (int m = 0; m < colAll.size(); m++) {
+					if (indexes.get(m) == i) {
+						colKp.add(colAll.get(m));
+					}
+				}
+				
+				if (colKp.size() > 0) {
+					tmpPoint.add(DataMath.arithmeticMean(colKp));
+				} else {
+					tmpPoint = null;
+					nullPoints++;
+					break;
+				}
+			}
+			if (tmpPoint != null) {
+				newKPoints.add(tmpPoint);
+			}
 		}
 
+		kPointsNum -= nullPoints;
 		kPoints = newKPoints;
 		FileHandler.writeMatrix(kPoints, destDir + "points");
 	}
 
-	public void calc() {
+	public void calc(int msDelay) {
 		try {
 			initKPoints();
 			writeMinDistPoints();
 			boolean flag = true;
 
 			final Runtime rt = Runtime.getRuntime();
-			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot1.txt");
+			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot_km.txt");
 
 			List<List<Double>> prevDataPoints = new ArrayList<List<Double>>();
-			while(flag) {	
+			while (flag) {
+				TimeUnit.MILLISECONDS.sleep(msDelay);
 				prevDataPoints = kPoints;
 				writeMinDistPoints();
 				recalcKPoints();
-				if (!prevDataPoints.retainAll(kPoints)) {
+				if (prevDataPoints.containsAll(kPoints) && kPoints.containsAll(prevDataPoints)) {
 					flag = false;
-				}
-				if (flag) {
-					FileHandler.makeEmptyDir(destDir);
 				}
 			}
 
-			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot2.txt");
-
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
