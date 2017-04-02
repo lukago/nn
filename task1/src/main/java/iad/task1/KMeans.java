@@ -10,63 +10,74 @@ public class KMeans {
 
 	private int kPointsNum;
 	private int dimensions;
+	private boolean normalize;
 	private String filepath;
 	private String separator;
+	private String gptCols;
 	private List<List<Double>> kPoints;
 	private List<Integer> indexes;
+	private List<Double> sds;
 
 	private final String destDir = "results_kmeans/";
 	private final String destFile = "kmeans.data";
 
-	public KMeans(int kPointsNum, int dimensions, String filepath, String separator) {
+	public KMeans(int kPointsNum, int dimensions, String filepath, String separator, boolean normalize,
+			String gptCols) {
 		this.kPointsNum = kPointsNum;
 		this.dimensions = dimensions;
 		this.filepath = filepath;
 		this.separator = separator;
+		this.normalize = normalize;
+		this.gptCols = gptCols;
 		kPoints = new ArrayList<List<Double>>();
 		indexes = new ArrayList<Integer>();
+		sds = FileHandler.calcSds(filepath, separator, dimensions);
+
+		if (normalize) {
+			FileHandler.normalize(filepath, separator, false, sds);
+		}
 
 		FileHandler.makeEmptyDir(destDir);
 		FileHandler.copy(filepath, destDir + destFile);
 	}
 
-	public void initKPoints() {
+	private void initKPoints() {
 		List<Double> avgs = new ArrayList<Double>();
-		List<Double> sds = new ArrayList<Double>();
+		List<Double> sdevs = new ArrayList<Double>();
 		List<Double> tmp = new ArrayList<Double>();
 		Random r = new Random();
 
 		for (int i = 0; i < dimensions; i++) {
 			avgs.add(DataMath.arithmeticMean(FileHandler.getColumn(i, filepath, separator)));
-			sds.add(DataMath.standardDeviation(FileHandler.getColumn(i, filepath, separator)));
+			sdevs.add(DataMath.standardDeviation(FileHandler.getColumn(i, filepath, separator)));
 		}
 
 		for (int i = 0; i < kPointsNum; i++) {
 			for (int j = 0; j < dimensions; j++) {
-				tmp.add(r.nextGaussian() * sds.get(j) + avgs.get(j));
+				tmp.add(r.nextGaussian() * sdevs.get(j) + avgs.get(j));
 			}
 			kPoints.add(tmp);
 			tmp = new ArrayList<Double>();
 		}
 
-		FileHandler.writeMatrix(kPoints, destDir + "points");
+		FileHandler.writeMatrix(kPoints, destDir + "points", separator);
 	}
 
 	/**
 	 * Calc vector of indexes to closest kp for each data point
 	 */
 	private void writeMinDistPoints() {
-		List<Double> rowVec = new ArrayList<Double>();
+		List<Double> dataPoint = new ArrayList<Double>();
 		List<Double> distsToKPs = new ArrayList<Double>();
 		indexes = new ArrayList<Integer>();
 
 		for (int i = 0; i < FileHandler.getFileRowsNum(filepath); i++) {
-			rowVec = FileHandler.getRow(i, filepath, separator);
+			dataPoint = FileHandler.getRow(i, filepath, separator);
 
 			// create array with distances to each kp for one data point
 			distsToKPs = new ArrayList<Double>();
 			for (int j = 0; j < kPointsNum; j++) {
-				distsToKPs.add(Metric.euclidean(kPoints.get(j), rowVec));
+				distsToKPs.add(Metric.euclidean(kPoints.get(j), dataPoint));
 			}
 
 			// get index of min from created array and add it to returned vector
@@ -78,11 +89,7 @@ public class KMeans {
 				}
 			}
 		}
-		
-		if(indexes.size() == 0 ) {
-			writeMinDistPoints();
-		}
-		
+
 		FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
 	}
 
@@ -105,7 +112,7 @@ public class KMeans {
 						colKp.add(colAll.get(m));
 					}
 				}
-				
+
 				if (colKp.size() > 0) {
 					tmpPoint.add(DataMath.arithmeticMean(colKp));
 				} else {
@@ -121,7 +128,7 @@ public class KMeans {
 
 		kPointsNum -= nullPoints;
 		kPoints = newKPoints;
-		FileHandler.writeMatrix(kPoints, destDir + "points");
+		FileHandler.writeMatrix(kPoints, destDir + "points", separator);
 	}
 
 	public void calc(int msDelay) {
@@ -131,7 +138,8 @@ public class KMeans {
 			boolean flag = true;
 
 			final Runtime rt = Runtime.getRuntime();
-			rt.exec("gnuplot " + System.getProperty("user.dir") + "/plot_km.txt");
+			String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/plot_km.gpt " + gptCols;
+			rt.exec(cmd);
 
 			List<List<Double>> prevDataPoints = new ArrayList<List<Double>>();
 			while (flag) {
@@ -143,13 +151,15 @@ public class KMeans {
 					flag = false;
 				}
 			}
+			
+			if (normalize) {
+				FileHandler.normalize(filepath, separator, true, sds);
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

@@ -1,0 +1,29 @@
+set key font ",10"
+#set xrange [-2:2]
+#set yrange [-2:2]
+set palette defined ( 0 "#02C800", 1 "#FF0000", 2 "#0000FF")
+unset colorbox
+
+reread_loop = 1;
+bind a "reread_loop = 0"
+bind "Close" "reread_loop = 0"
+c1 = ARG1+0
+c2 = ARG2+0
+c3 = ARG3+0
+
+set title 'k means'
+
+plot 	'results_kmeans/kmeans.data' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 7 title 'data',\
+		'results_kmeans/points' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 4 ps 2 title 'k'
+			
+pause 0.2
+if(reread_loop > 0) reread		
+
+#set terminal push
+#set terminal gif animate delay 50
+#set output "p.gif"
+#replot
+#set terminal pop
+
+
+ 

@@ -1,6 +1,7 @@
 ## Other
 android/assets/data/*
 results_data/
+results*
 plots/
 zad1/data/iris.dataresults
 zad1/data/Iris-*
