@@ -49,4 +49,14 @@ public final class Utils {
 		}
 		return sds;
 	}
+	
+	public static <T> List<T> getColumn(List<List<T>> matrix, int col) {
+		List<T> ret = new ArrayList<T>();
+		for(List<T> i : matrix) {
+			ret.add(i.get(col));
+		}
+		
+		return ret;
+	}
+	
 }

@@ -21,13 +21,16 @@ public class Kohonen {
 	protected List<List<Double>> neurons;
 	protected List<Integer> indexes;
 	protected List<Double> sds;
+	protected boolean image;
+	protected List<List<Double>> data;
 
-	protected final String destDir = "results_khn/";
-	protected final String destFile = "khn.data";
-	protected final String destFileNeurons = "neurons.data";
+	public final String destDir = "results_khn/";
+	public final String destFile = "khn.data";
+	public final String destFileNeurons = "neurons.data";
+	public final String imgcprFile = "imgcpr.data";
 
 	public Kohonen(int neuronsNum, int dimensions, String filepath, String separator, boolean normalize, String gptCols,
-			double mapRadius, double lambda, int iterations, double timeConst) {
+			double mapRadius, double lambda, int iterations, double timeConst, boolean image) {
 		this.neuronsNum = neuronsNum;
 		this.dimensions = dimensions;
 		this.filepath = filepath;
@@ -42,6 +45,7 @@ public class Kohonen {
 		this.neurons = new ArrayList<List<Double>>();
 		this.indexes = new ArrayList<Integer>();
 		this.sds = Utils.calcSds(filepath, separator, dimensions);
+		this.image = image;
 
 		if (normalize) {
 			Utils.normalize(filepath, separator, false, sds);
@@ -49,6 +53,8 @@ public class Kohonen {
 
 		FileHandler.makeEmptyDir(destDir);
 		FileHandler.copy(filepath, destDir + destFile);
+		
+		data = FileHandler.readData(filepath, separator);
 	}
 
 	protected void initNeurons() {
@@ -58,8 +64,8 @@ public class Kohonen {
 		Random r = new Random();
 
 		for (int i = 0; i < dimensions; i++) {
-			avgs.add(DataMath.arithmeticMean(FileHandler.getColumn(i, filepath, separator)));
-			sdevs.add(DataMath.standardDeviation(FileHandler.getColumn(i, filepath, separator)));
+			avgs.add(DataMath.arithmeticMean(Utils.getColumn(data, i)));
+			sdevs.add(DataMath.standardDeviation(Utils.getColumn(data, i)));
 		}
 
 		for (int i = 0; i < neuronsNum; i++) {
@@ -69,8 +75,6 @@ public class Kohonen {
 			neurons.add(tmp);
 			tmp = new ArrayList<Double>();
 		}
-
-		FileHandler.writeMatrix(neurons, destDir + destFileNeurons, separator);
 	}
 
 	/**
@@ -82,7 +86,7 @@ public class Kohonen {
 		indexes = new ArrayList<Integer>();
 
 		for (int i = 0; i < dataNum; i++) {
-			dataPoint = FileHandler.getRow(i, filepath, separator);
+			dataPoint = data.get(i);
 
 			// create array with distances to each kp for one data point
 			distsToNeurons = new ArrayList<Double>();
@@ -99,8 +103,6 @@ public class Kohonen {
 				}
 			}
 		}
-
-		FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
 	}
 
 	protected void learn(int epoch) {
@@ -110,11 +112,17 @@ public class Kohonen {
 		Random r = new Random();
 		pointIndex = r.nextInt(dataNum);
 
-		List<Double> point = FileHandler.getRow(pointIndex, filepath, separator);
+		List<Double> point = data.get(pointIndex);
 		List<Double> nearestNeuron = neurons.get(indexes.get(pointIndex));
 
 		mapRadiusNew = mapRadius * Math.exp(-(double) epoch / timeConst);
 		learningRate = learningRateStart * Math.exp(-(double) epoch / iterations);
+		
+		
+		if( mapRadiusNew < 1.0E-10) {
+			mapRadiusNew = 1.0E-10;
+		}
+		
 		System.out.println(mapRadiusNew + "\t" + learningRate + "\t");
 
 		for (int i = 0; i < neuronsNum; i++) {
@@ -126,27 +134,37 @@ public class Kohonen {
 				neurons.get(i).set(j, newWeight);
 			}
 		}
-
-		FileHandler.writeMatrix(neurons, destDir + destFileNeurons, separator);
 	}
 
 	public void calc() {
 		try {
 			initNeurons();
 			writeMinDistNeurons();
-
-			final Runtime rt = Runtime.getRuntime();
-			String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/plot_khn.gpt " + gptCols;
-			rt.exec(cmd);
+			
+			if (!image) {
+				FileHandler.writeMatrix(neurons, destDir + destFileNeurons, separator);
+				FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
+				final Runtime rt = Runtime.getRuntime();
+				String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/plot_khn.gpt " + gptCols;
+				rt.exec(cmd);
+			}
 
 			for (int i = 0; i < iterations; i++) {
 				writeMinDistNeurons();
 				learn(i);
+				System.out.println(i);
+				
+				if (!image) {
+					FileHandler.writeMatrix(neurons, destDir + destFileNeurons, separator);
+					FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
+				}
 			}
 
 			if (normalize) {
 				Utils.normalize(filepath, separator, true, sds);
 			}
+			
+			FileHandler.writePointsAsClusters(indexes, neurons, destDir + imgcprFile, separator);	
 
 		} catch (IOException e) {
 			e.printStackTrace();

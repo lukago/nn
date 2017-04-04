@@ -8,9 +8,9 @@ import java.util.TreeMap;
 public class NeuralGas extends Kohonen {
 
 	public NeuralGas(int neuronsNum, int dimensions, String filepath, String separator, boolean normalize,
-			String gptCols, double mapRadius, double lambda, int iterations, double timeConst) {
+			String gptCols, double mapRadius, double lambda, int iterations, double timeConst, boolean image) {
 		super(neuronsNum, dimensions, filepath, separator, normalize, gptCols, mapRadius, lambda, iterations,
-				timeConst);
+				timeConst, image);
 		this.timeConst = iterations / (mapRadius * timeConst);
 	}
 
@@ -21,7 +21,7 @@ public class NeuralGas extends Kohonen {
 		Random r = new Random();
 		pointIndex = r.nextInt(dataNum);
 
-		List<Double> point = FileHandler.getRow(pointIndex, filepath, separator);
+		List<Double> point = data.get(pointIndex);
 		List<Double> nearestNeuron = neurons.get(indexes.get(pointIndex));
 
 		mapRadiusNew = mapRadius * Math.exp(-(double) epoch / timeConst);
@@ -43,7 +43,7 @@ public class NeuralGas extends Kohonen {
 			}
 			i++;
 		}
-
-		FileHandler.writeMatrix(neurons, destDir + destFileNeurons, separator);
 	}
+	
+	
 }
