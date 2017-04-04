@@ -3,8 +3,9 @@ package iad.task1;
 import java.util.List;
 
 public final class Metric {
-	
-	private Metric() { }
+
+	private Metric() {
+	}
 
 	public static double taxicab(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 1);
@@ -13,7 +14,7 @@ public final class Metric {
 	public static double euclidean(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 2);
 	}
-	
+
 	public static double minkowski3p(List<Double> a, List<Double> b) {
 		return minkowski(a, b, 3);
 	}

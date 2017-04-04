@@ -4,31 +4,30 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class Kohonen {
 
-	private int neuronsNum;
-	private int dataNum;
-	private int dimensions;
-	private int iterations;
-	private boolean normalize;
-	private double mapRadius;
-	private double learningRateStart;
-	private String filepath;
-	private String separator;
-	private String gptCols;
-	private List<List<Double>> neurons;
-	private List<Integer> indexes;
-	private List<Double> sds;
-	private List<Double> distances;
+	protected int neuronsNum;
+	protected int dataNum;
+	protected int dimensions;
+	protected int iterations;
+	protected boolean normalize;
+	protected double mapRadius;
+	protected double learningRateStart;
+	protected double timeConst;
+	protected String filepath;
+	protected String separator;
+	protected String gptCols;
+	protected List<List<Double>> neurons;
+	protected List<Integer> indexes;
+	protected List<Double> sds;
 
-	private final String destDir = "results_khn/";
-	private final String destFile = "khn.data";
-	private final String destFileNeurons = "neurons.data";
+	protected final String destDir = "results_khn/";
+	protected final String destFile = "khn.data";
+	protected final String destFileNeurons = "neurons.data";
 
 	public Kohonen(int neuronsNum, int dimensions, String filepath, String separator, boolean normalize, String gptCols,
-			double radius, double lambda, int iterations) {
+			double mapRadius, double lambda, int iterations, double timeConst) {
 		this.neuronsNum = neuronsNum;
 		this.dimensions = dimensions;
 		this.filepath = filepath;
@@ -36,23 +35,23 @@ public class Kohonen {
 		this.normalize = normalize;
 		this.gptCols = gptCols;
 		this.dataNum = FileHandler.getFileRowsNum(filepath);
-		this.mapRadius = radius;
+		this.mapRadius = mapRadius;
 		this.learningRateStart = lambda;
 		this.iterations = iterations;
-		neurons = new ArrayList<List<Double>>();
-		indexes = new ArrayList<Integer>();
-		distances = new ArrayList<Double>();
-		sds = FileHandler.calcSds(filepath, separator, dimensions);
+		this.timeConst = (iterations) / (mapRadius * timeConst);
+		this.neurons = new ArrayList<List<Double>>();
+		this.indexes = new ArrayList<Integer>();
+		this.sds = Utils.calcSds(filepath, separator, dimensions);
 
 		if (normalize) {
-			FileHandler.normalize(filepath, separator, false, sds);
+			Utils.normalize(filepath, separator, false, sds);
 		}
 
 		FileHandler.makeEmptyDir(destDir);
 		FileHandler.copy(filepath, destDir + destFile);
 	}
 
-	private void initNeurons() {
+	protected void initNeurons() {
 		List<Double> avgs = new ArrayList<Double>();
 		List<Double> sdevs = new ArrayList<Double>();
 		List<Double> tmp = new ArrayList<Double>();
@@ -77,7 +76,7 @@ public class Kohonen {
 	/**
 	 * Calc vector of indexes to closest neuron for each data point
 	 */
-	private void writeMinDistNeurons() {
+	protected void writeMinDistNeurons() {
 		List<Double> dataPoint = new ArrayList<Double>();
 		List<Double> distsToNeurons = new ArrayList<Double>();
 		indexes = new ArrayList<Integer>();
@@ -93,7 +92,6 @@ public class Kohonen {
 
 			// get index of min from created array and add it to returned vector
 			double min = DataMath.min(distsToNeurons);
-			distances.add(min);
 			for (int j = 0; j < distsToNeurons.size(); j++) {
 				if (min == distsToNeurons.get(j)) {
 					indexes.add(j);
@@ -105,8 +103,8 @@ public class Kohonen {
 		FileHandler.appendColumn(filepath, destDir + destFile, separator, indexes);
 	}
 
-	private void learn(int epoch) {
-		double distFromBMU, radiusOfNeigh, learningRate, influence, newWeight;
+	protected void learn(int epoch) {
+		double distFromBMU, mapRadiusNew, learningRate, influence, newWeight;
 		int pointIndex;
 
 		Random r = new Random();
@@ -114,15 +112,16 @@ public class Kohonen {
 
 		List<Double> point = FileHandler.getRow(pointIndex, filepath, separator);
 		List<Double> nearestNeuron = neurons.get(indexes.get(pointIndex));
-		double timeConst = (double) iterations / mapRadius;
 
-		learningRate = learningRateStart;
+		mapRadiusNew = mapRadius * Math.exp(-(double) epoch / timeConst);
+		learningRate = learningRateStart * Math.exp(-(double) epoch / iterations);
+		System.out.println(mapRadiusNew + "\t" + learningRate + "\t");
+
 		for (int i = 0; i < neuronsNum; i++) {
+			distFromBMU = Metric.euclidean(nearestNeuron, neurons.get(i));
+			influence = Math.exp(-(distFromBMU * distFromBMU) / (2 * mapRadiusNew * mapRadiusNew));
+
 			for (int j = 0; j < neurons.get(i).size(); j++) {
-				distFromBMU = Metric.euclidean(nearestNeuron, neurons.get(i));
-				radiusOfNeigh = mapRadius * Math.exp(-(double) epoch / timeConst);
-				learningRate = learningRate * Math.exp(-(double) epoch / iterations);
-				influence = Math.exp(-(distFromBMU*distFromBMU) / (2 * radiusOfNeigh * radiusOfNeigh));
 				newWeight = neurons.get(i).get(j) + learningRate * influence * (point.get(j) - neurons.get(i).get(j));
 				neurons.get(i).set(j, newWeight);
 			}
@@ -143,16 +142,10 @@ public class Kohonen {
 			for (int i = 0; i < iterations; i++) {
 				writeMinDistNeurons();
 				learn(i);
-
-				try {
-					TimeUnit.MILLISECONDS.sleep(0);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 			}
 
 			if (normalize) {
-				FileHandler.normalize(filepath, separator, true, sds);
+				Utils.normalize(filepath, separator, true, sds);
 			}
 
 		} catch (IOException e) {

@@ -31,10 +31,10 @@ public class KMeans {
 		this.gptCols = gptCols;
 		kPoints = new ArrayList<List<Double>>();
 		indexes = new ArrayList<Integer>();
-		sds = FileHandler.calcSds(filepath, separator, dimensions);
+		sds = Utils.calcSds(filepath, separator, dimensions);
 
 		if (normalize) {
-			FileHandler.normalize(filepath, separator, false, sds);
+			Utils.normalize(filepath, separator, false, sds);
 		}
 
 		FileHandler.makeEmptyDir(destDir);
@@ -151,9 +151,9 @@ public class KMeans {
 					flag = false;
 				}
 			}
-			
+
 			if (normalize) {
-				FileHandler.normalize(filepath, separator, true, sds);
+				Utils.normalize(filepath, separator, true, sds);
 			}
 
 		} catch (IOException e) {
