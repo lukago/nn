@@ -45,6 +45,7 @@ public abstract class Neural {
 	 * @param neuronsNum number of neurons to initalize
 	 */
 	void initNeurons(int neuronsNum) {
+		neurons =  new ArrayList<List<Double>>();
 		List<Double> avgs = new ArrayList<Double>();
 		List<Double> sdevs = new ArrayList<Double>();
 		List<Double> tmp = new ArrayList<Double>();

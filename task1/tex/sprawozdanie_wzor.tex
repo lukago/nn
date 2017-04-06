@@ -5,6 +5,7 @@
 \usepackage{graphicx}
 \usepackage[usenames,dvipsnames]{color}
 \usepackage[hidelinks]{hyperref}
+\usepackage{subfig}
 
 \usepackage{amsmath, amssymb, mathtools}
 
@@ -61,6 +62,9 @@ Kolejnym etapem jest przyporządkowanie do każdego punktu najbliższego mu neur
 learningRate=learningRate_0 * exp(\dfrac{-i}{numberOfIterations})
 \end{equation}
 \begin{equation}
+timeConst=\dfrac{numberOfIterations}{(mapRadius_0 * timeConst_0)}
+\end{equation}
+\begin{equation}
 mapRadius=mapRadius_0 * exp(\dfrac{-i}{timeConst})
 \end{equation}
 \begin{equation}
@@ -106,18 +110,177 @@ oszczędzamy wówczas na dość kosztownych pod względem czasowym operacji na p
 
 \section{Materiały i metody}
 {
-Dla każdego algorytmu podawana jest liczba iteracji, liczba neuronów i plik źródłowy z danymi. }
+Dla każdego algorytmu podawana jest ilość iteracji, ilość centroidów(neuronów), plik źródłowy z danymi oraz dodatkowo dla algorytmów kohonena oraz gazu neuronowego wartości odpowiednich współczynników wpływających na przebieg oraz rezultat obliczeń. Dyskusji wyników dokonamy sprawdzając zachowania algorytmów dla określonych danych wejściowych i porównując je ze sobą. Przedstawimy również skrajne przypadki, które wpływają na nieefektywność zastosowanych rozwiązań. }
 
 \section{Wyniki}
-{\color{blue}
-W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
-kompletny zestaw wyników w postaci tabel, wykresów (preferowane) itp. Powinny
-być one tak ponazywane, aby było wiadomo, do czego się odnoszą. Wszystkie
-tabele i wykresy należy oczywiście opisać (opisać co jest na osiach, w
-kolumnach itd.) stosując się do przyjętych wcześniej oznaczeń. Nie należy tu
-komentować i interpretować wyników, gdyż miejsce na to jest w kolejnej sekcji.
-Tu również dobrze jest wprowadzić oznaczenia (tabel, wykresów), aby móc się do
-nich odwoływać poniżej.}
+{
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/kmeanssample1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: sample1 Algorytm: k-średnich n = 6 iter = 10  }
+\end{figure}
+ 
+ 
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/kmeanscircle1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: circle1 Algorytm: k-średnich n = 6 iter = 10  }
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/kohonensample1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: sample1 Algorytm: kohonena n = 6 iter = 10
+  mapRadius = 0.1 learningRate = 0.7 timeConst = 1  
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kohonencircle1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: circle1 Algorytm: kohonena n = 6 iter = 10
+  mapRadius = 0.1 learningRate = 0.7 timeConst = 1  
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kohonensample1_6_1000.png}
+ \vspace{-0.3cm}
+ \caption{Data: sample1 Algorytm: kohonena n = 6 iter = 1000
+  mapRadius = 1 learningRate = 0.1 timeConst = 1  
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neuralsample1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: sample1 Algorytm: gazu neuronowego n = 6 iter = 10
+  mapRadius = 0.1 learningRate = 0.7 timeConst = 1  
+}
+\end{figure}
+
+\newpage
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neuralcircle1_6_10.png}
+ \vspace{-0.3cm}
+ \caption{Data: circle1 Algorytm: gazu neuronowego n = 6 iter = 10
+  mapRadius = 0.1 learningRate = 0.7 timeConst = 1  
+}
+\end{figure}
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neuralsample1_6_1000.png}
+ \vspace{-0.3cm}
+ \caption{Data: circle1 Algorytm: gazu neuronowego n = 6 iter = 1000
+  mapRadius = 1 learningRate = 0.1 timeConst = 1  
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kmeans_1.png}
+ \vspace{-0.0cm}
+ \caption{Data: lena Algorytm: k-średnich frameSz = 4 n = 10 iter = 10
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kmeans_2.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: k-średnich frameSz = 3 n = 20 iter = 10
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kmeans_4.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: k-średnich frameSz = 3 n = 2 iter = 30
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kohonen_4.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 10000 mapRadius = 100 learningRate = 0.1 lrc = 0.1
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kohonen_5.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 1000 mapRadius = 0.01 learningRate = 0.1 lrc = 1
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/kohonen_6.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 10000 mapRadius = 300 learningRate = 0.1 lrc = 0.01
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neural_1.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 1000 mapRadius = 100 learningRate = 0.1 lrc = 1
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neural_3.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 1000 mapRadius = 300 learningRate = 0.1 lrc = 0.01
+}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neural_4.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 1000 mapRadius = 0.01 learningRate = 0.1 lrc = 1
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=12cm]{img/neural_5.png}
+ \vspace{-0.0cm}
+ \caption{Data: lenakolor3 Algorytm: kohonena frameSz = 3 n = 20 iter = 1000 mapRadius = 100 learningRate = 1.5 lrc = 1
+}
+\end{figure}
+}
+
 
 \section{Dyskusja}
 {\color{blue}

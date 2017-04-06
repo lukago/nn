@@ -13,19 +13,19 @@ public class TaskOneApp {
 	}
 	
 	public static void txt() {
-		Neural neural = new KMeans(10, 100, "data/circle1.data", "\t", false);
-		neural.calc(true, "1 2 3", "gnuplot/plot_km.gpt");
+		//Neural neural = new KMeans(6, 10, "data/circle1.data", "\t", false);
+		//neural.calc(true, "1 2 3", "gnuplot/plot_km.gpt");
 		
-		//Neural neural = new Kohonen(6, 1000, "data/circle1.data", "\t", false, 0.1, 0.1, 1); 
+		//Neural neural = new Kohonen(6, 1000, "data/sample1.data", "\t", false, 1, 0.1, 1); 
 		//neural.calc(true, "1 2 3", "gnuplot/plot_khn.gpt");
 
-		//Neural neural = new NeuralGas(16, 1000, "data/circle1.data", "\t", false, 1, 0.1, 1); 
-		//neural.calc(true, "1 2 3", "gnuplot/plot_ng.gpt");
+		Neural neural = new NeuralGas(6, 1000, "data/sample1.data", "\t", false, 1, 0.1, 1); 
+		neural.calc(true, "1 2 3", "gnuplot/plot_ng.gpt");
 	}
 	
 	public static void images() {
 		FileHandler.makeEmptyDir("data_img");
-		String imageFile = "images/img.jpg";
+		String imageFile = "images/lena.bmp";
 		String imageData = "data_img/img.data";
 		String sep = "\t";
 		int frameSz = 4;
