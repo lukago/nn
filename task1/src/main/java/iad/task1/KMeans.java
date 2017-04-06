@@ -9,54 +9,48 @@ public class KMeans extends Neural {
 	public final String destFile = "kmeans.data";
 	public final String neuronsFile = "neurons.data";
 	public final String imgcprFile = "imgcpr.data";
+	public final int rerolls = 10;
 
 	public KMeans(int neuronsNum, int iterations, String srcFilePath, String separator, boolean normalize) {
 		super(neuronsNum, iterations, srcFilePath, separator, normalize);
 
 		FileHandler.makeEmptyDir(destDir);
 		FileHandler.copy(srcFilePath, destDir + destFile);
+		
+		rerollDead(rerolls);
+		deleteDead();
 	}
-
+	
 	public void learn(int epoch) {
 		List<List<Double>> newNeurons = new ArrayList<List<Double>>();
-		List<Double> tmpPoint = new ArrayList<Double>();
-		List<Double> colKp = new ArrayList<Double>();
 		List<List<Double>> dataCols = new ArrayList<List<Double>>();
+		List<Double> colKp = new ArrayList<Double>();
+		List<Double> tmpPoint = new ArrayList<Double>();
+		
 		for (int i = 0; i<dimensions; i++) {
 			dataCols.add(Utils.getColumn(data, i));
 		}
 		
-
 		for (int i = 0; i < neurons.size(); i++) {
 			tmpPoint = new ArrayList<Double>();
-
-			for (int j = 0; j < dimensions; j++) {
+			
+			for (int j = 0; j < dimensions; j++) {		
 				colKp = new ArrayList<Double>();
-
+				
 				for (int m = 0; m < data.size(); m++) {
 					if (winnerIds.get(m) == i) {
 						colKp.add(dataCols.get(j).get(m));
 					}
 				}
-
-				if (colKp.size() > 0) {
-					tmpPoint.add(DataMath.arithmeticMean(colKp));
-				} else {
-					tmpPoint = null;
-					break;
-				}
+				tmpPoint.add(DataMath.arithmeticMean(colKp));
 			}
-			if (tmpPoint != null) {
-				newNeurons.add(tmpPoint);
-			}
+			newNeurons.add(tmpPoint);
 		}
 
 		neurons = newNeurons;
 	}
 
 	public void calc(boolean plot, String gptCols, String plotFile) {
-		calcWinnersIds();
-
 		if (plot) {
 			FileHandler.writeMatrixWithId(neurons, destDir + neuronsFile, separator);
 			FileHandler.appendColumn(srcFilePath, destDir + destFile, separator, winnerIds);

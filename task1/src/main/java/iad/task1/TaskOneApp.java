@@ -13,8 +13,8 @@ public class TaskOneApp {
 	}
 	
 	public static void txt() {
-		//Neural neural = new KMeans(60, 100, "data/circle1.data", "\t", false);
-		//neural.calc(true, "1 2 3", "gnuplot/plot_km.gpt");
+		Neural neural = new KMeans(10, 100, "data/circle1.data", "\t", false);
+		neural.calc(true, "1 2 3", "gnuplot/plot_km.gpt");
 		
 		//Neural neural = new Kohonen(6, 1000, "data/circle1.data", "\t", false, 0.1, 0.1, 1); 
 		//neural.calc(true, "1 2 3", "gnuplot/plot_khn.gpt");
@@ -30,7 +30,7 @@ public class TaskOneApp {
 		String sep = "\t";
 		int frameSz = 4;
 		int n = 20;
-		int iter = 300;
+		int iter = 500;
 		double mapRadius = 100;
 		double lr = 0.1;
 		double lrc = 1;	

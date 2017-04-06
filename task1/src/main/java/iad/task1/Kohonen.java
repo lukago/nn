@@ -14,6 +14,7 @@ public class Kohonen extends Neural {
 	public final String neuronsFile = "neurons.data";
 	public final String imgcprFile = "imgcpr.data";
 	public final double minRadius = 1.0E-10;
+	public final int rerolls = 10;
 
 	public Kohonen(int neuronsNum, int iterations, String srcFilePath, String separator, boolean normalize,
 			double mapRadiusStart, double learningRateStart, double timeConst) {
@@ -25,6 +26,8 @@ public class Kohonen extends Neural {
 
 		FileHandler.makeEmptyDir(destDir);
 		FileHandler.copy(srcFilePath, destDir + destFile);
+		
+		rerollDead(rerolls);
 	}
 
 	public void learn(int epoch) {
@@ -57,8 +60,6 @@ public class Kohonen extends Neural {
 	}
 
 	public void calc(boolean plot, String gptCols, String plotFile) {
-		calcWinnersIds();
-
 		if (plot) {
 			FileHandler.writeMatrixWithId(neurons, destDir + neuronsFile, separator);
 			FileHandler.appendColumn(srcFilePath, destDir + destFile, separator, winnerIds);

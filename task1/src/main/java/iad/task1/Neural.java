@@ -36,6 +36,7 @@ public abstract class Neural {
 		}
 
 		initNeurons(neuronsNum);
+		calcWinnersIds();
 	}
 
 	/**
@@ -83,6 +84,42 @@ public abstract class Neural {
 
 			// get index of min from created array
 			winnerIds.add(distsToNeurons.indexOf(DataMath.min(distsToNeurons)));
+		}
+	}
+	
+	/**
+	 * delete dead neurons
+	 */
+	void deleteDead() {
+		calcWinnersIds();
+		List<List<Double>> newNeurons = new ArrayList<List<Double>>();
+		for (int i = 0 ; i < neurons.size(); i++) {
+			if (winnerIds.contains(i)) {
+				newNeurons.add(neurons.get(i));
+			}
+		}
+		neurons = newNeurons;
+	}
+	
+	/**
+	 * reroll neurons if more dead than minDead
+	 */
+	void rerollDead(int numOfRerolls) {
+		int minDead = Integer.MAX_VALUE;
+		int dead = 0;
+		
+		for (int i = 0; i<numOfRerolls; i++) {
+			for (int j = 0 ; j < neurons.size(); j++) {
+				if (!winnerIds.contains(j)) {
+					dead++;
+				}
+			}
+			
+			if (dead < minDead ) {
+				initNeurons(neurons.size());
+				calcWinnersIds();
+				minDead = dead;
+			}	
 		}
 	}
 
