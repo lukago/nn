@@ -11,10 +11,10 @@ c1 = ARG1+0
 c2 = ARG2+0
 c3 = ARG3+0
 
-set title 'k means'
+set title 'neural gas SOM'
 
-plot 	'results_kmeans/kmeans.data' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 7 title 'data',\
-		'results_kmeans/points.data' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 4 ps 2 title 'k'
+plot 	'results_ng/ng.data' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 7 title 'data',\
+		'results_ng/neurons.data' using (column(c1)):(column(c2)):(column(c3)) with points palette pt 4 ps 2 title 'neurons'
 			
 pause 0.2
 if(reread_loop > 0) reread		
