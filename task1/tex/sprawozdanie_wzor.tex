@@ -1,0 +1,149 @@
+\documentclass{classrep}
+\usepackage[utf8]{inputenc}
+\frenchspacing
+
+\usepackage{graphicx}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{amsmath, amssymb, mathtools}
+
+\usepackage{fancyhdr, lastpage}
+\pagestyle{fancyplain}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\cfoot{\thepage\ / \pageref*{LastPage}}
+
+
+\studycycle{Informatyka, studia dzienne, I st.}
+\coursesemester{IV}
+
+\coursename{Inteligentna Analiza Danych}
+\courseyear{2016/2017}
+
+\courseteacher{mgr inż. Paweł Tarasiuk}
+\coursegroup{piątek, 12:00}
+
+\author{%
+  \studentinfo[203943@edu.p.lodz.pl]{Jakub Mielczarek}{203943}\\
+  \studentinfo[203882@edu.p.lodz.pl]{Łukasz Gołębiewski}{203882}%
+}
+
+\title{Zadanie 1.: Samoorganizujące mapy neuronowe z wykorzystaniem algorytmów: Kohonena, gazu neuronowego, k-średnich}
+
+\begin{document} 
+\maketitle 
+\thispagestyle{fancyplain}
+
+\section{Cel}
+{\color{black}
+Przedmiotem zadania jest implementacja algorytmów służących do przetwarzania zbiorów danych i ich klasyfikacji (grupowania) na mniejsze podzbiory według ściśle określonych zasad.
+
+\section{Wprowadzenie}
+{\color{black}
+Zadanie zostało podzielone na trzy warianty i w ten sposób zaprezentujemy teorię niezbędną do jego realizacji.
+
+\subsection*{Wariant I: Kwantyzacja przestrzeni za pomocą samoorganizującej się sieci neuronowej przy pomocy algorytmu Kohonena oraz algorytmu gazu neuronowego}
+Mamy zbiór danych opisujących punkty dla przestrzeni o dowolnej liczbie wymiarów. Pierwszym krokiem algorytmu Kohonena jest wygenerowanie neuronów, względem których będziemy dokonywać klasyfikacji. Neurony generujemy losowo wykorzystując rozkład Gaussa parametryzowany poprzez obliczenie średniej arytmetycznej oraz odchylenia standardowego dla punktów i-tego wymiaru. Neurony są losowane kilka razy wybierając tą strukturę która ma najmniej martwych neuronów. Średnia arytmetyczna: 
+\begin{equation}
+\sqrt{\dfrac{\sum_{i=1}^{n} x_i}{n} }
+\end{equation}
+Odchylenie standardowe:
+\begin{equation}
+\sqrt{\dfrac{\sum_{i=1}^{n} {(x_i - \bar{x})^2}}{n} }
+\end{equation}
+Odległość euklidesowa:
+\begin{equation}
+\sqrt{\dfrac{\sum_{i=1}^{n} {(x_{iA} - x_{iB})^2}}{n} }
+\end{equation}
+Kolejnym etapem jest przyporządkowanie do każdego punktu najbliższego mu neuronu(3). Wynik tej operacji jest zapisywany jako lista indeksów odpowiadających indeksom w liście neuronów. Następnie przechodzimy do najistotniejszej części algorytmu. Wybieramy losowy punkt oraz przyporządkowany mu neuron. Neuron ten od tego momentu będziemy określać jako "zwycięzcę" (BMU). Następnie obliczamy wagi (nowe współrzędne) wszystkich neuronów korzystając z następujących wzorów: 
+\begin{equation}
+learningRate=learningRate_0 * exp(\dfrac{-i}{numberOfIterations})
+\end{equation}
+\begin{equation}
+mapRadius=mapRadius_0 * exp(\dfrac{-i}{timeConst})
+\end{equation}
+\begin{equation}
+influence=exp(\dfrac{-(distFromBMU)^2}{2*(mapRadius)^2})
+\end{equation}
+\begin{equation}
+w_{ij}(new)=w_{ij}(old)+learningRate  * influence *  (x_j - w_{ij}(old) )
+\end{equation}
+Podany powyżej wzór (7) wykorzystuje gaussowską funkcję sąsiedztwa.
+Należy zauważyć, że również neurony-sąsiedzi podlegają modyfikacji, jednakże w słabszym stopniu. Algorytm jest powtarzany do osiągnięcia kryterium zbieżności, którym w tym przypadku jest liczba iteracji. Algorytm gazu neuronowego działa analogicznie jak algorytm Kohonena, przy czym zagadnienie sąsiedztwa rozwiązane jest przez uporządkowanie neuronów w szereg w zależności od odległości ich wektorów wagowych od podanego wektora wejściowego. Współczynnik nauki wyznaczany jest w tym przypadku na podstawie pozycji w szeregu, a nie faktycznej odległości(pozycja w szeregu jest ustalana poprzez odległość od BMU w kolejności rosnącej):
+\begin{equation}
+influence=exp(\dfrac{-(i)^2}{2*(mapRadius)^2})
+\end{equation}
+
+\subsection*{Wariant II: Kwantyzacja przestrzeni za pomocą samoorganizującej się sieci neuronowej przy pomocy algorytmu k-średnich}
+Mamy zbiór danych opisujących punkty dla przestrzeni o dowolnej liczbie wymiarów. Pierwszym krokiem algorytmu jest wygenerowanie centroidów (klas), względem których będziemy dokonywać klasyfikacji. Centroidy generujemy losowo wykorzystując rozkład Gaussa parametryzowany poprzez obliczenie średniej arytmetycznej(1) oraz odchylenia standardowego(2) dla punktów i-tego wymiaru. Neurony są losowane kilka razy wybierając tą strukturę która ma najmniej martwych neuronów. Kolejnym etapem jest obliczenie odległości punktów od centroidów i przypisanie ich do najbliższego k-centroidu(3). Ostatnim krokiem jest obliczenie średniej arytmetycznej(1) punktów należących do danego klastra. Jej wartość to nowe współrzędne k-centroidu. Algorytm jest powtarzany aż do osiągnięcia warunku kończącego. W naszej implementacji jest to określona z góry liczba iteracji lub otrzymanie tych samych współrzędnych dla centroidów w i+1 kroku iteracji.
+
+\subsection*{Wariant III: Kompresja obrazu}
+Aby skompresować obraz za pomocą w/w algorytmów najpierw przygotowujemy dane RGB pikseli z obrazu do pliku tekstowego. Obrazek jest dzielony na kwadratowe ramki o boku równym ilości pikseli zadanej przez użytkownika. Następnie każda ramka przekształcana jest do pliku tekstowego w taki sposób, że reprezentuje jedną daną. Dla przykładu dla kolorowego obrazka dla ramki o boku 3 pikseli jedna ramka będzie reprezentowana jako punkt w przestrzeni 27-wymiarowej - każdy piksel ma jeszcze 3 składowe RGB. Po zakończeni działania wybranego algorytmu należy jeszcze zastąpić wartości każdej ranki przyporządkowanym jej neuronem. Na sam koniec przeprowadza się operację zapisania przekształconych ramek do obrazka o wybranym formacie. 
+
+\section{Opis implementacji}
+Podstawowy opis plików klas:
+\begin{itemize}
+	\item Neural.java \ppauza klasa abstrakcyjna zawierające wspólne pola i metody dla każdego z algorytmów. 
+	\begin{itemize}
+		\item Kohonen.java \ppauza implementacja algorytmu SOM Kohonena.
+		\item NeuralGas.java \pauza implementacja algorytmu gazu neuronowego.
+		\item KMeans.java \ppauza implementacja algorytmu k-średnich. 
+	\end{itemize}
+	\item FileHandler.java \ppauza klasaa zawierająca statyczne metody do działań związanych z operacjami na plikach np. zapis macierzy danych do pliku w odpowiednim formacie tabulacji i znaków nowej linii. Odczyt danych z obrazu, zamiana pikseli z obrazka na ramki i zapis ich do pliku itp.  
+	\item Utils.java \ppauza klasa pomocnicza zawierająca statyczne metody do operacji takich jak normalizacja danych, pobranie wybranej kolumny z podanej struktury danych w postaci macierzy itp.
+	\item DataMath.java \ppauza klasa pomocnicza zawierająca statyczne metody do obliczania średnich, median, odchyleń standardowych itp.
+	\item Metric.java \ppauza klasa pomocnicza zawierająca statyczne metody do obliczania odległości pomiędzy punktami n-wymiarowymi w wybranej metryce.
+\end{itemize}
+Program, który wykorzystaliśmy do rysowania wykresów to Gnuplot. Odpowiednie pliki zawierające skrypty są wywoływane w trakcie działania programu co pozwala na odczyt danych w czasie rzeczywistym.
+Warto zauważyć, że przygotowane klasy posiadają dość duża ilość parametrów. Parametry pozwalają na:
+\begin{itemize}
+	\item ustalenie wszystkich początkowych wartości parametrów dla każdego algorytmu.
+	\item podanie ścieżki do pliku z danymi
+	\item ustalenie czy chcemy aby program generował wykresy. Jeśli nie, 
+oszczędzamy wówczas na dość kosztownych pod względem czasowym operacji na plikach podczas iteracji algorytmu (program nie musi przygotowywać plików dla gnuplota). 
+\end{itemize}
+
+\section{Materiały i metody}
+{
+Dla każdego algorytmu podawana jest liczba iteracji, liczba neuronów i plik źródłowy z danymi. }
+
+\section{Wyniki}
+{\color{blue}
+W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
+kompletny zestaw wyników w postaci tabel, wykresów (preferowane) itp. Powinny
+być one tak ponazywane, aby było wiadomo, do czego się odnoszą. Wszystkie
+tabele i wykresy należy oczywiście opisać (opisać co jest na osiach, w
+kolumnach itd.) stosując się do przyjętych wcześniej oznaczeń. Nie należy tu
+komentować i interpretować wyników, gdyż miejsce na to jest w kolejnej sekcji.
+Tu również dobrze jest wprowadzić oznaczenia (tabel, wykresów), aby móc się do
+nich odwoływać poniżej.}
+
+\section{Dyskusja}
+{\color{blue}
+Sekcja ta powinna zawierać dokładną interpretację uzyskanych wyników
+eksperymentów wraz ze szczegółowymi wnioskami z nich płynącymi. Najcenniejsze
+są, rzecz jasna, wnioski o charakterze uniwersalnym, które mogą być istotne
+przy innych, podobnych zadaniach. Należy również omówić i wyjaśnić wszystkie
+napotkane problemy (jeśli takie były). Każdy wniosek powinien mieć poparcie we
+wcześniej przeprowadzonych eksperymentach (odwołania do konkretnych wyników).
+Jest to jedna z najważniejszych sekcji tego sprawozdania, gdyż prezentuje
+poziom zrozumienia badanego problemu.}
+
+\section{Wnioski}
+{\color{blue}
+W tej, przedostatniej, sekcji należy zamieścić podsumowanie najważniejszych
+wniosków z sekcji poprzedniej. Najlepiej jest je po prostu wypunktować. Znów,
+tak jak poprzednio, najistotniejsze są wnioski o charakterze uniwersalnym.}
+
+\begin{thebibliography}{0}
+  \bibitem{l2short} T. Oetiker, H. Partl, I. Hyna, E. Schlegl.
+    \textsl{Nie za krótkie wprowadzenie do systemu \LaTeX2e}, 2007, dostępny
+    online.
+\end{thebibliography}
+
+{\color{blue}
+Na końcu należy obowiązkowo podać cytowaną w sprawozdaniu literaturę, z której
+grupa korzystała w trakcie prac nad zadaniem.}
+
+\end{document}
