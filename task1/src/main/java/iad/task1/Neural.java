@@ -89,7 +89,7 @@ public abstract class Neural {
 	}
 	
 	/**
-	 * delete dead neurons
+	 * Delete dead neurons.
 	 */
 	void deleteDead() {
 		calcWinnersIds();
@@ -103,7 +103,7 @@ public abstract class Neural {
 	}
 	
 	/**
-	 * reroll neurons if more dead than minDead
+	 * Reroll neurons if more dead than minDead.
 	 */
 	void rerollDead(int numOfRerolls) {
 		int minDead = Integer.MAX_VALUE;
