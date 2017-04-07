@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.6)  7 APR 2017 09:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.4.5)  7 APR 2017 12:15
 entering extended mode
 **./sprawozdanie_wzor.tex
 (sprawozdanie_wzor.tex
@@ -936,7 +936,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 257.
 ### bottom level 
 Here is how much of TeX's memory you used:
  8893 strings out of 493333
- 132271 string characters out of 3139195
+ 132271 string characters out of 3139160
  226802 words of memory out of 3000000
  12230 multiletter control sequences out of 15000+200000
  13638 words of font info for 39 fonts, out of 3000000 for 9000
@@ -945,18 +945,19 @@ Here is how much of TeX's memory you used:
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/pl/plms.enc}{C:/Pr
 ogram Files/MiKTeX 2.9/fonts/enc/dvips/pl/plrm.enc}{C:/Program Files/MiKTeX 2.9
 /fonts/enc/dvips/pl/plmi.enc}{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/pl/pl
-me.enc} <C:\Users\Admin\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dp
-i600\ecbx1200.pk> <C:\Users\Admin\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkna
-ppen\ec\dpi600\ecrm2074.pk> <C:\Users\Admin\AppData\Local\MiKTeX\2.9\fonts\pk\l
-jfour\jknappen\ec\dpi600\ectt1200.pk> <C:\Users\Admin\AppData\Local\MiKTeX\2.9\
-fonts\pk\ljfour\jknappen\ec\dpi600\ecbx1440.pk> <C:\Users\Admin\AppData\Local\M
-iKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm1200.pk><C:/Program Files/MiKT
-eX 2.9/fonts/type1/public/pl/plex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
-1/public/pl/plmi12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/pl/plmi8
-.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/pl/plr12.pfb><C:/Program F
-iles/MiKTeX 2.9/fonts/type1/public/pl/plr8.pfb><C:/Program Files/MiKTeX 2.9/fon
-ts/type1/public/pl/plsy10.pfb>
-Output written on sprawozdanie_wzor.pdf (12 pages, 391281 bytes).
+me.enc} <C:\Users\Jakub Mielczarek\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jkn
+appen\ec\dpi600\ecbx1200.pk> <C:\Users\Jakub Mielczarek\AppData\Local\MiKTeX\2.
+9\fonts\pk\ljfour\jknappen\ec\dpi600\ecrm2074.pk> <C:\Users\Jakub Mielczarek\Ap
+pData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\ectt1200.pk> <C:\User
+s\Jakub Mielczarek\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600\
+ecbx1440.pk> <C:\Users\Jakub Mielczarek\AppData\Local\MiKTeX\2.9\fonts\pk\ljfou
+r\jknappen\ec\dpi600\ecrm1200.pk><C:/Program Files/MiKTeX 2.9/fonts/type1/publi
+c/pl/plex10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/pl/plmi12.pfb><
+C:/Program Files/MiKTeX 2.9/fonts/type1/public/pl/plmi8.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/public/pl/plr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/pl/plr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/pl/plsy1
+0.pfb>
+Output written on sprawozdanie_wzor.pdf (12 pages, 317239 bytes).
 PDF statistics:
  408 PDF objects out of 1000 (max. 8388607)
  47 named destinations out of 1000 (max. 500000)
