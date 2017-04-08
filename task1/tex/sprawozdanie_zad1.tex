@@ -244,6 +244,61 @@ Dla każdego algorytmu podawana jest ilość iteracji, ilość centroidów(neuro
 \end{figure}
 }
 
+\subsection{Porównanie podobieństwa obrazu wyjściowego z wejściowym}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/lenakolor3.jpg}
+ \vspace{-0.3cm}
+ \caption{Obrazek wejściowy
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/km1.png}
+ \vspace{-0.3cm}
+ \caption{Data: lenakolor3 Algorytm: k-średmich frameSz = 3 n = 20 iter = 20 procentowa różnica: 3.95%
+}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/ng1.png}
+ \vspace{-0.3cm}
+ \caption{Data: lenakolor3 Algorytm: gazu neuronowego frameSz = 3 n = 20 iter = 2000 mapRadius = 50 learningRate = 0.05 learningRate0  = 1 procentowa różnica: 3.86
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/khn1.png}
+ \vspace{-0.3cm}
+ \caption{Data: lenakolor3 Algorytm: Kohonena frameSz = 3 n = 20 iter = 2000 mapRadius = 1 learningRate = 0.05 learningRate0  = 1 procentowa różnica: 5.72
+}
+\end{figure}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/kohonen_4.png}
+ \vspace{-0.3cm}
+ \caption{Data: lenakolor3 Algorytm: Kohonena frameSz = 3 n = 20 iter = 10000 mapRadius = 1 learningRate = 0.1 learningRate0  = 1 procentowa różnica: 3.70
+}
+\end{figure}
+
+\newpage
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=12cm]{img/ng2.png}
+ \vspace{-0.3cm}
+ \caption{Data: lenakolor3 Algorytm: gazu neuronowego frameSz = 3 n = 20 iter = 10000 mapRadius = 50 learningRate = 0.1 learningRate0  = 1 procentowa różnica: 3.80
+}
+\end{figure}
 
 \section{Dyskusja i wnioski}
 \subsection{Algorytm k-średnich}
@@ -251,7 +306,8 @@ Algorytm k-średnich wymaga niewielkiej liczby iteracji aby osiągnąć satysfak
 \subsection{Algorytm Kohonena i gazu neuronowego}
 Dla algorytmu Kohonena duże znaczenie mają początkowe parametry. Dla zbyt dużego promienia, który będzie stosunkowo wolno malał wszystkie neurony zbiegną się do środka ciężkości - Rys. 3). Prawidłowo przeprowadzony algorytm powinien przebiegać w dwóch etapach. W pierwszym promień sąsiedztwa i szybkość nauki powinny być stosunkowo duże tak aby sieć przesunęła się w kierunku skupisk danych. Drugim etapem jest wymodelowanie sieci dla okolicznych punktów. Tutaj promień sąsiedztwa i szybkość nauki są już niewielkie. Ze względu na to, że początkowe położenie neuronów obliczamy na postawie rozkładu Gaussa, pierwszy etap jest pomijalny. Z tego powodu dla Rys. 9 gdzie początkowy promień był niewielki uzyskano lepszy wynik niż dla Rys.10 gdzie promień był większy, co powodowało skupienie się neuronów do większych klastrów, natomiast mniejsze nie zostały uwzględnione przez co obrazek na Rys. 10 ma mniej szczegółów. \\
 Algorytm gazu neuronowego działa najlepiej gdy promień sąsiedztwa obejmuje część sąsiednich neuronów - Rys 11. Promień sąsiedztwa nie jet tutaj tak inwazyjny i nie powoduje tak dużego przyciągania się neuronów znajdującego się wewnątrz promienia, a umożliwia elastyczne dostosowywanie się sieci.  \\
-Dla obu algorytmów parametr szybkości uczenia powinien być dość mały. Dla większych wartości neurony są zbyt mocno przyciągane do wybranego punktu danych. Na Rys. 14 widać, że obrazek ma większy kontrast niż Rys. 11 co wynika ze zbyt dużej wartości parametru szybkości uczenia.
+Dla obu algorytmów parametr szybkości uczenia powinien być dość mały. Dla większych wartości neurony są zbyt mocno przyciągane do wybranego punktu danych. Na Rys. 14 widać, że obrazek ma większy kontrast niż Rys. 11 co wynika ze zbyt dużej wartości parametru szybkości uczenia. \\
+Algorytmy Kohonena i gazu neuronowego wymagają większej ilości czasu, ale dla tej samej liczby neuronów pozwalają osiągnąć lepsze wyniki niż metodą k-średnich - Rys.16-20. Algorytm gazu neuronowego pozwala osiągnąć lepsze wyniki dla mniejszej ilości iteracji w porównaniu z algorytmem Kohonena - Rys.17-18 ale algorytm Kohonena ostatecznie dla dużej ilości iteracji daje najlepsze wyniki - Rys.19-20.
 }
 
 \end{document}
