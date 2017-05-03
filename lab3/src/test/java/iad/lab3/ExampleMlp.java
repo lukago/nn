@@ -15,10 +15,10 @@ public class ExampleMlp {
 		// initalize mlp
 		int[] layers = new int[] { 2, 6, 1 };
 		double learningRate = 0.2;
-		double momentum = 0.2;
+		double momentum = 0.5;
 		boolean useBias = true;
 		ActivationFunction f = new Sigmoidal();
-		int epochs = 1000;
+		int epochs = 10000;
 		String in = "data/xor_in.data";
 		String out = "data/xor_out.data";
 		String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/gnuplot/plot.gpt " + out;
@@ -42,13 +42,16 @@ public class ExampleMlp {
 				quadFunVals[i] = MLPUtils.quadraticCostFun(epochOut, outputs[indexes.get(j)]);
 			}
 		}
+		
+		new File("results").mkdir();
+		MLPUtils.serialize(mlp, "results/mlp.bin");
+		mlp = MLPUtils.deserialize("results/mlp.bin");
 
 		double[][] outFinal = new double[inputs.length][];
 		for (int i = 0; i < inputs.length; i++) {
 			outFinal[i] = mlp.execute(inputs[i]);
 		}
-
-		new File("results").mkdir();
+		
 		MLPUtils.writeQuadFun("results/quad.data", quadFunVals);
 		MLPUtils.writeResults("results/out.data", outFinal);
 		MLPUtils.rumCmd(cmd);

@@ -1,11 +1,17 @@
 package iad.lab3.utlis;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import iad.lab3.MultiLayerPerceptron;
 
 public final class MLPUtils {
 
@@ -66,7 +72,48 @@ public final class MLPUtils {
 
 		return ret;
 	}
+
+	public static void serialize(MultiLayerPerceptron mlp, String filepath) {
+		FileOutputStream fileOut = null;
+		ObjectOutputStream out = null;
+		try {
+			fileOut = new FileOutputStream(filepath);
+			out = new ObjectOutputStream(fileOut);
+			out.writeObject(mlp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fileOut.close();
+				out.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 	
+	public static MultiLayerPerceptron deserialize(String filepath) {
+		FileInputStream fileIn = null;
+		ObjectInputStream in = null;
+		MultiLayerPerceptron mlp = null; 
+		try {
+			fileIn = new FileInputStream(filepath);
+			in = new ObjectInputStream(fileIn);
+			mlp = (MultiLayerPerceptron) in.readObject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fileIn.close();
+				in.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return mlp;
+	}
+
 	public static void rumCmd(String cmd) {
 		final Runtime rt = Runtime.getRuntime();
 		try {

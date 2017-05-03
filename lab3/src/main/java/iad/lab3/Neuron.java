@@ -1,8 +1,12 @@
 package iad.lab3;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Neuron {
+public class Neuron implements Serializable {
+
+	private static final long serialVersionUID = -5899845557319234523L;
+	
 	public double Value;
 	public double[] Weights;
 	public double[] PrevWeights;

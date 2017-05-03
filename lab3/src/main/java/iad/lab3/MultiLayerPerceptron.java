@@ -1,6 +1,10 @@
 package iad.lab3;
 
-public class MultiLayerPerceptron {
+import java.io.Serializable;
+
+public class MultiLayerPerceptron implements Serializable {
+
+	private static final long serialVersionUID = -4481210057997822231L;
 	protected double learningRate;
 	protected double momentum;
 	protected boolean useBias;
@@ -47,7 +51,7 @@ public class MultiLayerPerceptron {
 			updateLayerWeightsAndBias(i);
 		}
 
-		// return info about propagation error
+		// return output
 		return newOutput;
 	}
 

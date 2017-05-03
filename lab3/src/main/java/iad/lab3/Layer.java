@@ -1,6 +1,11 @@
 package iad.lab3;
 
-public class Layer {
+import java.io.Serializable;
+
+public class Layer implements Serializable {
+
+	private static final long serialVersionUID = 7735337090092044738L;
+	
 	public Neuron Neurons[];
 	public int NeuronsNum;
 
