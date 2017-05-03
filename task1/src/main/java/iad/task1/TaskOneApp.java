@@ -7,19 +7,10 @@ public class TaskOneApp {
 
 	public static void main(String[] args) {
 		
-		images();	
+		//images();	
 		//txt();
-		//float p = FileHandler.compareImage(new File("images/lenakolor3.jpg"), new File("results_km/out.bmp") );
-		//System.out.println(p);
 		
-		//n = 20, iter = 20 fs =3
-		//FileHandler.compareImg("images/lenakolor3.jpg", "results_km/out.png");
-		
-		//int n = 20; iter = 2000; mapRadius = 50; lr = 0.05; double lrc = 1;
-		//FileHandler.compareImg("images/lenakolor3.jpg", "results_ng/out.png");
-		
-		//int n = 100; iter = 2000; mapRadius = 1; lr = 0.05; double lrc = 1;	
-		//FileHandler.compareImg("images/lenakolor3.jpg", "results_khn/out.png");
+		FileHandler.compareImg("images/lenakolor3.jpg", "images/l3.jpg");
 	}
 	
 	public static void images() {
