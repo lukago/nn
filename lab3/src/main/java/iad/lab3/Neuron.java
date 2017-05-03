@@ -5,6 +5,7 @@ import java.util.Random;
 public class Neuron {
 	public double Value;
 	public double[] Weights;
+	public double[] PrevWeights;
 	public double Bias;
 	public double Delta;
 	
@@ -12,6 +13,7 @@ public class Neuron {
 
 	public Neuron(int prevLayerSize) {
 		Weights = new double[prevLayerSize];
+		PrevWeights = new double[prevLayerSize];
 		Bias = random.nextGaussian();
 		Delta = random.nextGaussian();
 		Value = random.nextGaussian();

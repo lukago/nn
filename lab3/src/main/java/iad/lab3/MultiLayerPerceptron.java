@@ -2,12 +2,14 @@ package iad.lab3;
 
 public class MultiLayerPerceptron {
 	protected double learningRate;
+	protected double momentum;
 	protected boolean useBias;
 	protected Layer[] layers;
 	protected ActivationFunction actFun;
 
-	public MultiLayerPerceptron(int[] layersInfo, double lr, Boolean bias, ActivationFunction fun) {
+	public MultiLayerPerceptron(int[] layersInfo, double lr, double mo, Boolean bias, ActivationFunction fun) {
 		learningRate = lr;
+		momentum = mo;
 		useBias = bias;
 		actFun = fun;
 		createLayers(layersInfo);
@@ -73,12 +75,18 @@ public class MultiLayerPerceptron {
 	}
 
 	private void updateLayerWeightsAndBias(int layer) {
-		double delta, value;
+		double delta, value, weightsDiff, weightCurr, weightPrev, deltaValLr;
 		for (int i = 0; i < layers[layer + 1].NeuronsNum; i++) {
+			weightPrev = layers[layer + 1].Neurons[i].Weights[0];
 			for (int j = 0; j < layers[layer].NeuronsNum; j++) {
 				delta = layers[layer + 1].Neurons[i].Delta;
 				value = layers[layer].Neurons[j].Value;
-				layers[layer + 1].Neurons[i].Weights[j] += delta * value;
+				weightCurr = layers[layer + 1].Neurons[i].Weights[j];
+				weightPrev = layers[layer + 1].Neurons[i].PrevWeights[j];
+				weightsDiff = momentum * (weightCurr - weightPrev);
+				deltaValLr = delta * value * learningRate;
+				layers[layer + 1].Neurons[i].PrevWeights[j] = weightCurr;
+				layers[layer + 1].Neurons[i].Weights[j] += deltaValLr + weightsDiff;
 			}
 			delta = layers[layer + 1].Neurons[i].Delta;
 			layers[layer + 1].Neurons[i].Bias += learningRate * delta;
@@ -100,7 +108,7 @@ public class MultiLayerPerceptron {
 			layers[layer].Neurons[i].Value = actFun.evalute(newValue);
 		}
 	}
-	
+
 	private void createLayers(int[] layersInfo) {
 		layers = new Layer[layersInfo.length];
 		for (int i = 0; i < layersInfo.length; i++) {
@@ -111,5 +119,5 @@ public class MultiLayerPerceptron {
 			}
 		}
 	}
-	
+
 }

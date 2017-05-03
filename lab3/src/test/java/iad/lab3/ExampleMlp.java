@@ -11,29 +11,30 @@ import iad.lab3.utlis.MLPUtils;
 public class ExampleMlp {
 
 	public static void main(String[] args) {
-		
-		//initalize mlp
+
+		// initalize mlp
 		int[] layers = new int[] { 2, 6, 1 };
 		double learningRate = 0.2;
+		double momentum = 0.2;
 		boolean useBias = true;
 		ActivationFunction f = new Sigmoidal();
 		int epochs = 1000;
 		String in = "data/xor_in.data";
 		String out = "data/xor_out.data";
 		String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/gnuplot/plot.gpt " + out;
-		
-		MultiLayerPerceptron mlp = new MultiLayerPerceptron(layers, learningRate, useBias, f);
-		
-		//local 
+
+		MultiLayerPerceptron mlp = new MultiLayerPerceptron(layers, learningRate, momentum, useBias, f);
+
+		// local
 		double[] epochOut;
 		double[][] inputs = MLPUtils.readMatrix(in, "\t");
-		double[][] outputs = MLPUtils.readMatrix(out, "\t");	
+		double[][] outputs = MLPUtils.readMatrix(out, "\t");
 		double[] quadFunVals = new double[epochs];
 		List<Integer> indexes = new ArrayList<>();
-		for (int i = 0; i<outputs.length; i++) {
+		for (int i = 0; i < outputs.length; i++) {
 			indexes.add(i);
-		}	
-		
+		}
+
 		for (int i = 0; i < epochs; i++) {
 			Collections.shuffle(indexes);
 			for (int j = 0; j < inputs.length; j++) {
@@ -41,15 +42,15 @@ public class ExampleMlp {
 				quadFunVals[i] = MLPUtils.quadraticCostFun(epochOut, outputs[indexes.get(j)]);
 			}
 		}
-		
-		double[][] outFinal = new double [inputs.length][];
+
+		double[][] outFinal = new double[inputs.length][];
 		for (int i = 0; i < inputs.length; i++) {
 			outFinal[i] = mlp.execute(inputs[i]);
 		}
 
 		new File("results").mkdir();
 		MLPUtils.writeQuadFun("results/quad.data", quadFunVals);
-		MLPUtils.writeResults("results/out.data", outFinal);	
+		MLPUtils.writeResults("results/out.data", outFinal);
 		MLPUtils.rumCmd(cmd);
 	}
 }
