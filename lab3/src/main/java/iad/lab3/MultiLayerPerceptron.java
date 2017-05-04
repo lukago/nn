@@ -5,17 +5,19 @@ import java.io.Serializable;
 public class MultiLayerPerceptron implements Serializable {
 
 	private static final long serialVersionUID = -4481210057997822231L;
+
 	protected double learningRate;
 	protected double momentum;
 	protected boolean useBias;
 	protected Layer[] layers;
 	protected ActivationFunction actFun;
 
-	public MultiLayerPerceptron(int[] layersInfo, double lr, double mo, Boolean bias, ActivationFunction fun) {
-		learningRate = lr;
-		momentum = mo;
-		useBias = bias;
-		actFun = fun;
+	public MultiLayerPerceptron(int[] layersInfo, double learrningRate, 
+			double momentum, boolean useBias, ActivationFunction actFun) {
+		this.learningRate = learrningRate;
+		this.momentum = momentum;
+		this.useBias = useBias;
+		this.actFun = actFun;
 		createLayers(layersInfo);
 	}
 
@@ -42,16 +44,13 @@ public class MultiLayerPerceptron implements Serializable {
 	public double[] backPropagate(double[] input, double[] exOutput) {
 		double newOutput[] = execute(input);
 
-		// last layer delta
 		updateLastLayerDelta(newOutput, exOutput);
 
-		// back propagate error from last layer to previous layers
 		for (int i = layers.length - 2; i >= 0; i--) {
 			updateLayerDelta(i);
 			updateLayerWeightsAndBias(i);
 		}
 
-		// return output
 		return newOutput;
 	}
 
@@ -80,15 +79,17 @@ public class MultiLayerPerceptron implements Serializable {
 
 	private void updateLayerWeightsAndBias(int layer) {
 		double delta, value, weightsDiff, weightCurr, weightPrev, deltaValLr;
+
 		for (int i = 0; i < layers[layer + 1].NeuronsNum; i++) {
-			weightPrev = layers[layer + 1].Neurons[i].Weights[0];
 			for (int j = 0; j < layers[layer].NeuronsNum; j++) {
 				delta = layers[layer + 1].Neurons[i].Delta;
 				value = layers[layer].Neurons[j].Value;
+				deltaValLr = delta * value * learningRate;
+
 				weightCurr = layers[layer + 1].Neurons[i].Weights[j];
 				weightPrev = layers[layer + 1].Neurons[i].PrevWeights[j];
 				weightsDiff = momentum * (weightCurr - weightPrev);
-				deltaValLr = delta * value * learningRate;
+
 				layers[layer + 1].Neurons[i].PrevWeights[j] = weightCurr;
 				layers[layer + 1].Neurons[i].Weights[j] += deltaValLr + weightsDiff;
 			}

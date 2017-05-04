@@ -13,10 +13,10 @@ public class ExampleMlp {
 	public static void main(String[] args) {
 
 		// initalize mlp
-		int[] layers = new int[] { 2, 6, 1 };
-		double learningRate = 0.2;
-		double momentum = 0.5;
-		boolean useBias = true;
+		int[] layers = new int[] { 2, 2, 1 };
+		double learningRate = 0.4;
+		double momentum = 0.0;
+		boolean useBias = false;
 		ActivationFunction f = new Sigmoidal();
 		int epochs = 10000;
 		String in = "data/xor_in.data";
@@ -39,7 +39,7 @@ public class ExampleMlp {
 			Collections.shuffle(indexes);
 			for (int j = 0; j < inputs.length; j++) {
 				epochOut = mlp.backPropagate(inputs[indexes.get(j)], outputs[indexes.get(j)]);
-				quadFunVals[i] = MLPUtils.quadraticCostFun(epochOut, outputs[indexes.get(j)]);
+				quadFunVals[i] += MLPUtils.quadraticCostFun(epochOut, outputs[indexes.get(j)]);
 			}
 		}
 		
@@ -51,6 +51,7 @@ public class ExampleMlp {
 		for (int i = 0; i < inputs.length; i++) {
 			outFinal[i] = mlp.execute(inputs[i]);
 		}
+		
 		
 		MLPUtils.writeQuadFun("results/quad.data", quadFunVals);
 		MLPUtils.writeResults("results/out.data", outFinal);
