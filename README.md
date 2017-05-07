@@ -2,10 +2,13 @@
 Intelligent Data Analysis algorithms.
 ## Clustering 
 Algorithms:
+
 * kohonen SOM
 * neural gas
-* k-means
+* k-means. <br />
+
 Features:
+
 * image quantization 
 * n-dimensional data clustering
 * gnuplot 
