@@ -3,7 +3,7 @@ Intelligent Data Analysis algorithms.
 ## Clustering 
 Algorithms:
 
-* kohonen SOM
+* Kohonen SOM
 * neural gas
 * k-means. <br />
 
