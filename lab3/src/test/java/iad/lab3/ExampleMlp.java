@@ -14,11 +14,11 @@ public class ExampleMlp {
 
 		// initalize mlp
 		int[] layers = new int[] { 2, 2, 1 };
-		double learningRate = 0.4;
-		double momentum = 0.0;
-		boolean useBias = false;
+		double learningRate = 0.01;
+		double momentum = 0.9;
+		boolean useBias = true;
 		ActivationFunction f = new Sigmoidal();
-		int epochs = 10000;
+		int epochs = 300000;
 		String in = "data/xor_in.data";
 		String out = "data/xor_out.data";
 		String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/gnuplot/plot.gpt " + out;
