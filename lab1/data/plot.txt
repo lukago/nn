@@ -1,6 +1,0 @@
-set term png
-set output 'plot.png'
-
-plot 'Iris-setosa.data' using 1:2,\
- 'Iris-versicolor.data' using 1:2,\
- 'Iris-virginica.data' using 1:2
