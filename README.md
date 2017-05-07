@@ -10,7 +10,7 @@ Algorithms:
 Features:
 
 * image quantization 
-* n-dimensional data clustering
+* n-dimensional 
 * gnuplot 
 ## Multilayer perceptron
 Features:
