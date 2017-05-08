@@ -1,4 +1,4 @@
-package iad.task1;
+package iad.cluster.common;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;

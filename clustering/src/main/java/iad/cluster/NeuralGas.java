@@ -1,22 +1,27 @@
-package iad.task1;
+package iad.cluster;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
-public class Kohonen extends Neural {
+import iad.cluster.common.FileHandler;
+import iad.cluster.common.Metric;
+import iad.cluster.common.Utils;
+
+public class NeuralGas extends Neural {
 
 	private double mapRadiusStart;
 	private double learningRateStart;
 	private double timeConst;
 
-	public final String destDir = "results_khn/";
-	public final String destFile = "khn.data";
+	public final String destDir = "results_ng/";
+	public final String destFile = "ng.data";
 	public final String neuronsFile = "neurons.data";
 	public final String imgcprFile = "imgcpr.data";
-	public final double minRadius = 1.0E-10;
 	public final int rerolls = 10;
 
-	public Kohonen(int neuronsNum, int iterations, String srcFilePath, String separator, boolean normalize,
+	public NeuralGas(int neuronsNum, int iterations, String srcFilePath, String separator, boolean normalize,
 			double mapRadiusStart, double learningRateStart, double timeConst) {
 		super(neuronsNum, iterations, srcFilePath, separator, normalize);
 
@@ -31,7 +36,7 @@ public class Kohonen extends Neural {
 	}
 
 	public void learn(int epoch) {
-		double distFromBMU, mapRadius, learningRate, influence, newWeight;
+		double learningRate, influence, newWeight, mapRadius;
 		int pointIndex;
 
 		Random r = new Random();
@@ -42,20 +47,22 @@ public class Kohonen extends Neural {
 
 		mapRadius = mapRadiusStart * Math.exp(-(double) epoch / timeConst);
 		learningRate = learningRateStart * Math.exp(-(double) epoch / iterations);
-
-		if (mapRadius < minRadius) {
-			mapRadius = minRadius;
-		}
 		// System.out.println(mapRadius + "\t" + learningRate + "\t");
 
+		Map<Double, List<Double>> map = new TreeMap<Double, List<Double>>();
 		for (int i = 0; i < neurons.size(); i++) {
-			distFromBMU = Metric.euclidean(nearestNeuron, neurons.get(i));
-			influence = Math.exp(-(distFromBMU * distFromBMU) / (2 * mapRadius * mapRadius));
+			map.put(Metric.euclidean(neurons.get(i), nearestNeuron), neurons.get(i));
+		}
 
-			for (int j = 0; j < neurons.get(i).size(); j++) {
-				newWeight = neurons.get(i).get(j) + learningRate * influence * (point.get(j) - neurons.get(i).get(j));
-				neurons.get(i).set(j, newWeight);
+		int i = 0;
+		for (Map.Entry<Double, List<Double>> e : map.entrySet()) {
+			List<Double> neuron = e.getValue();
+			for (int j = 0; j < neuron.size(); j++) {
+				influence = Math.exp(-(i) / (mapRadius));
+				newWeight = neuron.get(j) + learningRate * influence * (point.get(j) - neuron.get(j));
+				neuron.set(j, newWeight);
 			}
+			i++;
 		}
 	}
 

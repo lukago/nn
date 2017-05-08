@@ -1,14 +1,16 @@
-package iad.task1;
+package iad.cluster;
+
+import iad.cluster.common.FileHandler;
 
 // Lukasz Golebiewski 203882
 // Jakub Mielczarek 203943
 
-public class TaskOneApp {
+public class ExampleApp {
 
 	public static void main(String[] args) {
 		
 		//images();	
-		//txt();
+		txt();
 		
 		FileHandler.compareImg("images/lenakolor3.jpg", "images/l3.jpg");
 	}

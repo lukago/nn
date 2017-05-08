@@ -1,7 +1,11 @@
-package iad.task1;
+package iad.cluster;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import iad.cluster.common.DataMath;
+import iad.cluster.common.FileHandler;
+import iad.cluster.common.Utils;
 
 public class KMeans extends Neural {
 
