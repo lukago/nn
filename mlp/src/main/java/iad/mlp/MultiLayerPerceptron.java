@@ -1,4 +1,4 @@
-package iad.lab3;
+package iad.mlp;
 
 import java.io.Serializable;
 

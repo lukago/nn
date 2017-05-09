@@ -1,12 +1,14 @@
-package iad.lab3;
+package iad.mlp;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import iad.lab3.activationFunctions.Sigmoidal;
-import iad.lab3.utlis.MLPUtils;
+import iad.mlp.ActivationFunction;
+import iad.mlp.MultiLayerPerceptron;
+import iad.mlp.activationFunctions.Sigmoidal;
+import iad.mlp.utlis.MLPUtils;
 
 public class ExampleMlp {
 

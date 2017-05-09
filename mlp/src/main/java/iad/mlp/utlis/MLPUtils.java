@@ -1,4 +1,4 @@
-package iad.lab3.utlis;
+package iad.mlp.utlis;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import iad.lab3.Layer;
-import iad.lab3.MultiLayerPerceptron;
+import iad.mlp.Layer;
+import iad.mlp.MultiLayerPerceptron;
 
 public final class MLPUtils {
 

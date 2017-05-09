@@ -1,8 +1,8 @@
-package iad.lab3.activationFunctions;
+package iad.mlp.activationFunctions;
 
 import java.io.Serializable;
 
-import iad.lab3.ActivationFunction;
+import iad.mlp.ActivationFunction;
 
 public class Sigmoidal implements ActivationFunction, Serializable {
 
