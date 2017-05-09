@@ -13,17 +13,18 @@ public class ExampleMlp {
 	public static void main(String[] args) {
 
 		// initalize mlp
-		int[] layers = new int[] { 2, 2, 1 };
-		double learningRate = 0.01;
-		double momentum = 0.9;
-		boolean useBias = true;
+		int[] layers = new int[] { 4, 8, 4 };
+		double learningRate = 0.2;
+		double momentum = 0.0;
+		boolean useBias = false;
 		ActivationFunction f = new Sigmoidal();
-		int epochs = 300000;
-		String in = "data/xor_in.data";
-		String out = "data/xor_out.data";
+		int epochs = 10000;
+		double div = 50;
+		String in = "data/z2_in.data";
+		String out = "data/z2_out.data";
 		String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/gnuplot/plot.gpt " + out;
 
-		MultiLayerPerceptron mlp = new MultiLayerPerceptron(layers, learningRate, momentum, useBias, f);
+		MultiLayerPerceptron mlp = new MultiLayerPerceptron(layers, learningRate, momentum, useBias, f, div);
 
 		// local
 		double[] epochOut;
@@ -50,11 +51,13 @@ public class ExampleMlp {
 		double[][] outFinal = new double[inputs.length][];
 		for (int i = 0; i < inputs.length; i++) {
 			outFinal[i] = mlp.execute(inputs[i]);
+			MLPUtils.writeMLPData("results/mlp" + i + ".data", mlp);
 		}
 		
 		
 		MLPUtils.writeQuadFun("results/quad.data", quadFunVals);
 		MLPUtils.writeResults("results/out.data", outFinal);
+		MLPUtils.writeError("results/error.data", outFinal, outputs);
 		MLPUtils.rumCmd(cmd);
 	}
 }

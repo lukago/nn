@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import iad.lab3.Layer;
 import iad.lab3.MultiLayerPerceptron;
 
 public final class MLPUtils {
@@ -24,6 +25,34 @@ public final class MLPUtils {
 			ret += Math.pow(exOutput[i] - newOutput[i], 2);
 		}
 		return ret;
+	}
+	
+	public static void writeMLPData(String filepath, MultiLayerPerceptron mlp) {
+		Layer[] layers = mlp.getLayers();
+		try (FileWriter ostream = new FileWriter(filepath)) {
+			for (int i = 0; i < layers.length; i++) {
+				ostream.write(layers[i].toString());				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void writeError(String filepath, double[][] newOutput, double exOutput[][]) {
+		try (FileWriter ostream = new FileWriter(filepath)) {	
+			double error = 0, errorSum = 0;
+			for (int i = 0; i < exOutput.length; i++) {			
+				for (int j = 0; j < exOutput[i].length; j++) {
+					error += Math.abs(newOutput[i][j] - exOutput[i][j]);
+				}
+				errorSum += error;
+				ostream.write(i + "\t" + error + "\n");
+				error = 0;
+			}
+			ostream.write("\t" + errorSum + "\n");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void writeQuadFun(String filepath, double[] values) {
