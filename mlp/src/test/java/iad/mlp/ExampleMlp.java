@@ -15,13 +15,13 @@ public class ExampleMlp {
 	public static void main(String[] args) {
 
 		// initalize mlp
-		int[] layers = new int[] { 4, 8, 4 };
-		double learningRate = 0.2;
+		int[] layers = new int[] { 4, 6, 4 };
+		double learningRate = 0.6;
 		double momentum = 0.0;
 		boolean useBias = false;
 		ActivationFunction f = new Sigmoidal();
-		int epochs = 10000;
-		double div = 50;
+		int epochs = 2500;
+		double div = 25;
 		String in = "data/z2_in.data";
 		String out = "data/z2_out.data";
 		String cmd = "gnuplot -c " + System.getProperty("user.dir") + "/gnuplot/plot.gpt " + out;

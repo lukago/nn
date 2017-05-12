@@ -10,7 +10,7 @@ plot 	'results/out.data' with points pt 1 title 'mlp out',\
 		c1 with points pt 2 title 'expected'
 
 unset offsets		
-set yrange [0:2]
+set yrange [0:4]
 set title 'quadratic function in epochs'
 set output 'results/quad.png'
 plot 	'results/quad.data' with lines title 'quadratic function'
