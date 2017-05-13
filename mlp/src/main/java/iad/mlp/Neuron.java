@@ -23,7 +23,7 @@ public class Neuron implements Serializable {
 		value = random.nextGaussian();
 
 		for (int i = 0; i < weights.length; i++) {
-			weights[i] = 0.2 / gaussDiv;
+			weights[i] = random.nextGaussian() / gaussDiv;
 		}
 	}
 	

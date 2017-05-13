@@ -15,9 +15,9 @@ public class ExampleMlp {
 	public static void main(String[] args) {
 
 		// initalize mlp
-		int[] layers = new int[] { 4, 6, 4 };
-		double learningRate = 0.6;
-		double momentum = 0.0;
+		int[] layers = new int[] { 4, 4, 2, 4 };
+		double learningRate = 0.2;
+		double momentum = 0.8;
 		boolean useBias = false;
 		ActivationFunction f = new Sigmoidal();
 		int epochs = 2500;
