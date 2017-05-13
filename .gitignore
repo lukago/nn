@@ -9,6 +9,8 @@ data_img/
 images/
 lab1/
 lab2/
+img/
+*.tex
 
 ## Java
 *.class
