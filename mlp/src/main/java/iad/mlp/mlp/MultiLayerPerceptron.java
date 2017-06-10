@@ -1,16 +1,21 @@
-package iad.mlp;
+package iad.mlp.mlp;
+
+import iad.mlp.actfun.ActivationFunction;
+import iad.mlp.utlis.MLPUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MultiLayerPerceptron implements Serializable {
-
-	private static final long serialVersionUID = -4481210057997822231L;
 
 	private double learningRate;
 	private double momentum;
 	private boolean useBias;
 	private Layer[] layers;
 	private ActivationFunction actFun;
+	private double[] quadFunVals;
 
 	public MultiLayerPerceptron(int[] layersInfo, double learrningRate, 
 			double momentum, boolean useBias, ActivationFunction actFun,
@@ -22,6 +27,25 @@ public class MultiLayerPerceptron implements Serializable {
 		Neuron.gaussDiv = gaussDiv;
 		createLayers(layersInfo);
 	}
+
+    public void learn(int epochs, double[][] inputs, double[][] outputs) {
+        quadFunVals = new double[epochs];
+        List<Integer> indexes = new ArrayList<>();
+        for (int i = 0; i < outputs.length; i++) {
+            indexes.add(i);
+        }
+
+        for (int i = 0; i < epochs; i++) {
+            System.out.println(i);
+            Collections.shuffle(indexes);
+            for (int j = 0; j < inputs.length; j++) {
+                double[] epochOut = backPropagate(inputs[indexes.get(j)],
+                        outputs[indexes.get(j)]);
+                quadFunVals[i] += MLPUtils.quadraticCostFun(
+                        epochOut, outputs[indexes.get(j)]);
+            }
+        }
+    }
 
 	public double[] execute(double[] input) {
 		// Put input to the first layer
@@ -130,6 +154,9 @@ public class MultiLayerPerceptron implements Serializable {
 	public Layer[] getLayers() {
 		return layers;
 	}
-	
+
+    public double[] getQuadFunVals() {
+	    return quadFunVals;
+    }
 
 }

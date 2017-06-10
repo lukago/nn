@@ -1,11 +1,10 @@
-package iad.mlp;
+package iad.mlp.mlp;
 
 import java.io.Serializable;
 import java.util.Random;
 
 public class Neuron implements Serializable {
 
-	private static final long serialVersionUID = -5899845557319234523L;
 	private static Random random = new Random();
 	public static double gaussDiv = 25.0;
 	
@@ -29,12 +28,12 @@ public class Neuron implements Serializable {
 	
 	@Override
 	public String toString() {
-		String ret = "Weights: ";
+		StringBuilder ret = new StringBuilder("Weights: ");
 		for (double i : weights) {
-			ret += i + " ";
+			ret.append(i).append(" ");
 		}
-		ret += "\nValue: " + value;
-		return ret;
+		ret.append("\nValue: ").append(value);
+		return ret.toString();
 	}
 	
 }

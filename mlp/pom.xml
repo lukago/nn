@@ -15,6 +15,16 @@
 			<artifactId>commons-cli</artifactId>
 			<version>1.4</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-mllib_2.11 -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-mllib_2.11</artifactId>
+			<version>2.1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
@@ -28,7 +38,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>iad.mlp.MlpCli</mainClass>
+							<mainClass>iad.mlp.AppMlpCLI</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

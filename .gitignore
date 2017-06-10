@@ -11,6 +11,9 @@ lab1/
 lab2/
 img/
 *.tex
+*.ser
+*.bin
+*-ubyte
 
 ## Java
 *.class

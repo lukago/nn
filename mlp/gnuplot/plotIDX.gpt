@@ -1,0 +1,9 @@
+set key font ",10"
+set term png
+
+unset offsets		
+set yrange [0:4]
+set title 'quadratic function in epochs'
+set output 'results/quad.png'
+plot 	'results/quad.data' with lines title 'quadratic function'
+			

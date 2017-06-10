@@ -1,10 +1,8 @@
-package iad.mlp;
+package iad.mlp.mlp;
 
 import java.io.Serializable;
 
 public class Layer implements Serializable {
-
-	private static final long serialVersionUID = 7735337090092044738L;
 	
 	public Neuron neurons[];
 	public int neuronsNum;
@@ -20,11 +18,11 @@ public class Layer implements Serializable {
 	
 	@Override
 	public String toString() {
-		String ret = "LAYER\n";
+		StringBuilder ret = new StringBuilder("LAYER\n");
 		for (int i =0; i<neurons.length; i++) {
-			ret += "Neuron " + i + ":\n";
-			ret += neurons[i].toString() + "\n";
+			ret.append("Neuron ").append(i).append(":\n");
+			ret.append(neurons[i].toString()).append("\n");
 		}
-		return ret;
+		return ret.toString();
 	}
 }
