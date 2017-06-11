@@ -1,9 +1,19 @@
 set key font ",10"
 set term png
 
+c1 = ARG1
+
 unset offsets		
-set yrange [0:4]
+#set yrange [0:5]
 set title 'quadratic function in epochs'
 set output 'results/quad.png'
-plot 	'results/quad.data' with lines title 'quadratic function'
+set xlabel 'epochs'
+set ylabel 'quad_fun(epoch)'
+plot 'results/quad.data' with lines title 'quadratic function'
+		
+set title 'classification error percentage'
+set output 'results/perc_error.png'
+set xlabel 'epochs * '.c1
+set ylabel '%'
+plot 'results/perc_error.data' with lines title 'error percentage'
 			

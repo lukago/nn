@@ -17,11 +17,15 @@ public class IdxManager implements AutoCloseable, Serializable {
     String inputLabelPath;
     String outputPath;
     boolean writeImg;
+    int numOfRows;
+    int numOfCols;
     transient FileInputStream inImage;
     transient FileInputStream inLabel;
 
     double[][] data;
+    int[][] pixelData;
     double[][] labels;
+    double[] labelsVec;
 
     public IdxManager(String inputImagePath, String inputLabelPath,
                       String outputPath, boolean writeImg) {
@@ -31,9 +35,11 @@ public class IdxManager implements AutoCloseable, Serializable {
         this.writeImg = writeImg;
     }
 
-    public void load() throws IOException {
+    public IdxManager(String inputImagePath, String inputLabelPath) {
+        this(inputImagePath, inputLabelPath, null, false);
+    }
 
-        int[] hashMap = new int[10];
+    public void load() throws IOException {
 
         inImage = new FileInputStream(inputImagePath);
         inLabel = new FileInputStream(inputLabelPath);
@@ -42,9 +48,9 @@ public class IdxManager implements AutoCloseable, Serializable {
                 | (inImage.read() << 8) | (inImage.read());
         int numberOfImages = (inImage.read() << 24) | (inImage.read() << 16)
                 | (inImage.read() << 8) | (inImage.read());
-        int numberOfRows = (inImage.read() << 24) | (inImage.read() << 16)
+        numOfRows = (inImage.read() << 24) | (inImage.read() << 16)
                 | (inImage.read() << 8) | (inImage.read());
-        int numberOfColumns = (inImage.read() << 24) | (inImage.read() << 16)
+        numOfCols = (inImage.read() << 24) | (inImage.read() << 16)
                 | (inImage.read() << 8) | (inImage.read());
 
         int magicNumberLabels = (inLabel.read() << 24) | (inLabel.read() << 16)
@@ -52,41 +58,45 @@ public class IdxManager implements AutoCloseable, Serializable {
         int numberOfLabels = (inLabel.read() << 24) | (inLabel.read() << 16)
                 | (inLabel.read() << 8) | (inLabel.read());
 
-        BufferedImage image = new BufferedImage(numberOfColumns,
-                numberOfRows, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage image = new BufferedImage(numOfCols,
+                numOfRows, BufferedImage.TYPE_INT_ARGB);
 
-        int numberOfPixels = numberOfRows * numberOfColumns;
+        int numberOfPixels = numOfRows * numOfCols;
         int[] imgPixels = new int[numberOfPixels];
+        int[] imgVals = new int[numberOfPixels];
         data = new double[numberOfLabels][];
+        pixelData = new int[numberOfLabels][];
         labels = new double[numberOfLabels][10];
+        labelsVec = new double[numberOfLabels];
 
         for (int i = 0; i < numberOfImages; i++) {
-
-            if (i % 5000 == 0) {
-                System.out.println("Number of images extracted: " + i);
-            }
 
             for (int p = 0; p < numberOfPixels; p++) {
                 int gray = 255 - inImage.read();
                 imgPixels[p] = 0xFF000000 | (gray << 16) | (gray << 8) | gray;
+                imgVals[p] = gray;
             }
 
             int label = inLabel.read();
 
-            data[i] = Arrays.stream(imgPixels).asDoubleStream().toArray();
+            data[i] = Arrays.stream(imgVals).asDoubleStream().toArray();
+            pixelData[i] = imgPixels;
             labels[i][label] = 1.0;
+            labelsVec[i] = label;
 
-            hashMap[label]++;
             if (writeImg) {
-                File outputfile = new File(outputPath + label + "_0" +
-                        hashMap[label] + ".png");
-                image.setRGB(0, 0, numberOfColumns, numberOfRows, imgPixels, 0,
-                        numberOfColumns);
+                File outputfile = new File(outputPath + "img" + i + ".png");
+                image.setRGB(0, 0, numOfCols, numOfRows, imgPixels, 0,
+                        numOfCols);
                 ImageIO.write(image, "png", outputfile);
+            }
+
+            if (i % 1000 == 0) {
+                System.out.println("Number of images extracted: " + i);
+                //return;
             }
         }
     }
-
 
     @Override
     public void close() throws IOException {
@@ -100,5 +110,21 @@ public class IdxManager implements AutoCloseable, Serializable {
 
     public double[][] getLabels() {
         return labels;
+    }
+
+    public double[] getLabelsVec() {
+        return labelsVec;
+    }
+
+    public int[][] getPixelData() {
+        return pixelData;
+    }
+
+    public int getNumOfRows() {
+        return numOfRows;
+    }
+
+    public int getNumOfCols() {
+        return numOfCols;
     }
 }

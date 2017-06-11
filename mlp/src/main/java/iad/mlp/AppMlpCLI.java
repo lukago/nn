@@ -3,6 +3,7 @@ package iad.mlp;
 import iad.mlp.actfun.ActivationFunction;
 import iad.mlp.actfun.Sigmoidal;
 import iad.mlp.mlp.MultiLayerPerceptron;
+import iad.mlp.utlis.IOUtils;
 import iad.mlp.utlis.MLPUtils;
 import org.apache.commons.cli.*;
 
@@ -21,31 +22,31 @@ class AppMlpCLI {
         String out = cmd.getOptionValue("o");
         int epochs = Integer.parseInt(cmd.getOptionValue("e"));
         String gptCmd = "gnuplot -c " + System.getProperty("user.dir")
-                + "/gnuplot/plot.gpt " + out;
+                + "/gnuplot/plotIDX.gpt ";
 
         // local
-        double[][] inputs = MLPUtils.readMatrix(in, "\t");
-        double[][] outputs = MLPUtils.readMatrix(out, "\t");
+        double[][] inputs = IOUtils.readMatrix(in, "\t");
+        double[][] outputs = IOUtils.readMatrix(out, "\t");
         MultiLayerPerceptron mlp = initMlp(cmd);
 
         // learn
         mlp.learn(epochs, inputs, outputs);
 
         new File("results").mkdir();
-        MLPUtils.serialize(mlp, "results/mlp.bin");
-        mlp = MLPUtils.deserialize("results/mlp.bin");
+        IOUtils.serialize(mlp, "results/mlp.bin");
+        mlp = IOUtils.deserialize("results/mlp.bin");
 
         double[][] outFinal = new double[inputs.length][];
         for (int i = 0; i < inputs.length; i++) {
             outFinal[i] = mlp.execute(inputs[i]);
-            MLPUtils.writeMLPData("results/mlp" + i + ".data", mlp);
+            IOUtils.writeMLPData("results/mlp" + i + ".data", mlp);
         }
         double[] error = MLPUtils.calcError(outFinal, outputs);
 
-        MLPUtils.writeVector("results/quad.data", mlp.getQuadFunVals());
-        MLPUtils.writeMatrix("results/out.data", outFinal);
-        MLPUtils.writeVector("results/error.data", error);
-        MLPUtils.rumCmd(gptCmd);
+        IOUtils.writeVector("results/quad.data", mlp.getQuadFunVals());
+        IOUtils.writeMatrix("results/out.data", outFinal);
+        IOUtils.writeVector("results/error.data", error);
+        IOUtils.rumCmd(gptCmd);
     }
 
     private static Options createOptions() {
