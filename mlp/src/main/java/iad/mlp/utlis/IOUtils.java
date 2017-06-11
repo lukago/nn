@@ -116,6 +116,7 @@ public final class IOUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static <T> T deserialize(String filepath) {
         FileInputStream fileIn = null;
         ObjectInputStream in = null;

@@ -28,13 +28,13 @@ public class ExampleIdx {
 
         inputs = HogManager.exportDataFeatures(inputs, idx.getNumOfRows(),
                 idx.getNumOfCols());
-        inputsTest =  HogManager.exportDataFeatures(inputsTest, idx.getNumOfRows(),
+        inputsTest = HogManager.exportDataFeatures(inputsTest, idx.getNumOfRows(),
                 idx.getNumOfCols());
         //MLPUtils.normalize(inputs);
 
         // initalize mlp
         String cmd = "gnuplot -c " + System.getProperty("user.dir") +
-                "/gnuplot/plotIDX.gpt " +cmPerEpoch;
+                "/gnuplot/plotIDX.gpt " + cmPerEpoch;
 
         int[] layers = new int[]{
                 inputs[0].length,

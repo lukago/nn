@@ -53,7 +53,7 @@ public class MultiLayerPerceptron implements Serializable {
                         epochOut, outputs[indexes.get(j)]);
             }
 
-            if (i%CM_PER_EPOCH == 0) {
+            if (i % CM_PER_EPOCH == 0) {
                 for (int j = 0; j < inputs.length; j++) {
                     epochsOuts[j] = execute(inputs[j]);
                 }
@@ -61,7 +61,7 @@ public class MultiLayerPerceptron implements Serializable {
                 ConfusionMatrix cm = new ConfusionMatrix(epochsOuts, outputs);
                 percErrList.add(100.0 * cm.falsePositivesTotal / inputs.length);
                 System.out.println(i + ": " + quadFunVals[i] + " " +
-                        percErrList.get(percErrList.size()-1));
+                        percErrList.get(percErrList.size() - 1));
             }
         }
 

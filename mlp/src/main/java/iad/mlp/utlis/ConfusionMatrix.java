@@ -10,18 +10,15 @@ import java.util.List;
  */
 public class ConfusionMatrix {
 
+    public int truePositivesTotal;
+    public int falseNegativesTotal;
+    public int falsePositivesTotal;
     private double[][] out;
     private double[][] expectedOut;
-
     private int truePositives;
     private int falseNegatives;
     private int falsePositives;
     private int trueNegatives;
-
-    public int truePositivesTotal;
-    public int falseNegativesTotal;
-    public int falsePositivesTotal;
-
     private List<List<Integer>> classFN;
     private List<List<Integer>> classFP;
 
@@ -42,13 +39,6 @@ public class ConfusionMatrix {
         calcClass();
     }
 
-    private boolean isPropelyClassifed(double[] out, double[] expectedOut) {
-        if (MLPUtils.maxId(out) == MLPUtils.maxId(expectedOut)) {
-            return true;
-        }
-        return false;
-    }
-
     private int calcAllClassLabels(int id) {
         int sum = 0;
         for (int i = 0; i < expectedOut.length; i++) {
@@ -61,7 +51,7 @@ public class ConfusionMatrix {
 
     public void calcClass() {
         for (int i = 0; i < out.length; i++) {
-            if (!isPropelyClassifed(out[i], expectedOut[i])) {
+            if (MLPUtils.maxId(out[i]) != MLPUtils.maxId(expectedOut[i])) {
                 classFN.get(MLPUtils.maxId(expectedOut[i])).add(i);
             }
         }

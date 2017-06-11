@@ -42,7 +42,7 @@ public class HogManager {
 
     public static double[][] exportDataFeatures(double[][] data, int rows, int cols) {
         double[][] retArr = new double[data.length][];
-        for (int i = 0; i<data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             retArr[i] = HogManager.exportImgFeatures(data[i], rows, cols);
         }
         return retArr;

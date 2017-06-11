@@ -88,8 +88,8 @@ public class ExampleSpark {
 
         // results
         new File("results").mkdir();
-        IOUtils.writeStr("results/dtree_error", Double.toString(testErr));
-        IOUtils.writeStr("results/dtree_model", model.toDebugString());
+        IOUtils.writeStr("results/dtree_error.data", Double.toString(testErr));
+        IOUtils.writeStr("results/dtree_model.data", model.toDebugString());
 
         double[][] outFinal = new double[outputsTest.length][];
         for (int i = 0; i < outputsTest.length; i++) {
