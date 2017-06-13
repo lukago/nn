@@ -1,4 +1,4 @@
-package iad.mlp.utlis;
+package iad.mlp.utils;
 
 import org.opencv.core.*;
 import org.opencv.objdetect.HOGDescriptor;

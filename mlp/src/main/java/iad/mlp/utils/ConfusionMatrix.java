@@ -1,4 +1,4 @@
-package iad.mlp.utlis;
+package iad.mlp.utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -90,23 +90,23 @@ public class ConfusionMatrix {
             for (int i = 0; i < classFN.size(); i++) {
                 sum(i);
 
-                ostream.write("===\nClass: " + i);
-                ostream.write("\nTP: " + truePositives);
-                ostream.write("\nFN: " + falseNegatives);
-                for (int j = 0; j < classFN.get(i).size(); j++) {
-                    ostream.write("\tid: " + classFN.get(i).get(j));
-                }
-                ostream.write("\nFP: " + falsePositives);
-                for (int j = 0; j < classFP.get(i).size(); j++) {
-                    ostream.write("\tid: " + classFP.get(i).get(j));
-                }
-                ostream.write("\nTN: " + trueNegatives + "\n");
+                ostream.write("\nKlasa: " + i);
+                ostream.write(" TP: " + truePositives);
+                ostream.write(" FN: " + falseNegatives);
+                //for (int j = 0; j < classFN.get(i).size(); j++) {
+                //    ostream.write("\tid: " + classFN.get(i).get(j));
+                //}
+                ostream.write(" FP: " + falsePositives);
+                //for (int j = 0; j < classFP.get(i).size(); j++) {
+                //    ostream.write("\tid: " + classFP.get(i).get(j));
+                //}
+                ostream.write(" TN: " + trueNegatives);
             }
 
-            ostream.write("\n===\nTotal: ");
-            ostream.write("\nTP: " + truePositivesTotal);
-            ostream.write("\nFN: " + falseNegativesTotal);
-            ostream.write("\nFP: " + falsePositivesTotal);
+            ostream.write("\nSuma: ");
+            ostream.write(" TP: " + truePositivesTotal);
+            ostream.write(" FN: " + falseNegativesTotal);
+            ostream.write(" FP: " + falsePositivesTotal);
         } catch (IOException e) {
             e.printStackTrace();
         }

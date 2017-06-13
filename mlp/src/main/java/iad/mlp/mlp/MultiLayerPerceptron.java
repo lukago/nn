@@ -1,8 +1,8 @@
 package iad.mlp.mlp;
 
 import iad.mlp.actfun.ActivationFunction;
-import iad.mlp.utlis.ConfusionMatrix;
-import iad.mlp.utlis.MLPUtils;
+import iad.mlp.utils.ConfusionMatrix;
+import iad.mlp.utils.MLPUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package iad.mlp.utlis;
+package iad.mlp.utils;
 
 import iad.mlp.mlp.Layer;
 import iad.mlp.mlp.MultiLayerPerceptron;

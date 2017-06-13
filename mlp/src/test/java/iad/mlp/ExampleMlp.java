@@ -3,10 +3,10 @@ package iad.mlp;
 import iad.mlp.actfun.ActivationFunction;
 import iad.mlp.actfun.Sigmoidal;
 import iad.mlp.mlp.MultiLayerPerceptron;
-import iad.mlp.utlis.ConfusionMatrix;
-import iad.mlp.utlis.IOUtils;
-import iad.mlp.utlis.MLPUtils;
-import iad.mlp.utlis.SubsetManager;
+import iad.mlp.utils.ConfusionMatrix;
+import iad.mlp.utils.IOUtils;
+import iad.mlp.utils.MLPUtils;
+import iad.mlp.utils.SubsetManager;
 
 import java.io.File;
 
@@ -16,12 +16,12 @@ public class ExampleMlp {
 
         // initalize mlp
         int cmPerEpoch = 100;
-        int[] layers = new int[]{4, 12, 3};
+        int[] layers = new int[]{4, 100, 3};
         double learningRate = 0.01;
         double momentum = 0.8;
         boolean useBias = true;
         ActivationFunction f = new Sigmoidal();
-        int epochs = 10000;
+        int epochs = 9000;
         double div = 25;
         String in = "data/iris2.data";
         String out = "data/iris2out.data";
@@ -34,8 +34,9 @@ public class ExampleMlp {
         // local
         double[][] inputs = IOUtils.readMatrix(in, ",");
         double[][] outputs = IOUtils.readMatrix(out, " ");
+        // MLPUtils.normalize(inputs);
 
-        SubsetManager sm = new SubsetManager(inputs, outputs, 0.7);
+        SubsetManager sm = new SubsetManager(inputs, outputs, 0.8);
         sm.calc();
 
         inputs = sm.getData();
@@ -44,7 +45,11 @@ public class ExampleMlp {
         double[][] outputsTest = sm.getLabelsTest();
 
         mlp.setCmPerEpoch(cmPerEpoch);
+        long startTime = System.currentTimeMillis();
+        System.out.println(inputs.length);
         mlp.learn(epochs, inputs, outputs);
+        long endTime = System.currentTimeMillis();
+        long learnTime = endTime - startTime;
 
         new File("results").mkdir();
         IOUtils.serialize(mlp, "results/mlp.bin");
@@ -61,6 +66,7 @@ public class ExampleMlp {
         IOUtils.writeMatrix("results/ex_out.data", outputs);
         IOUtils.writeVector("results/error.data", error);
         IOUtils.writeVector("results/perc_error.data", mlp.getPercentageError());
+        IOUtils.writeStr("results/learn_time_ms.data", Long.toString(learnTime));
 
         ConfusionMatrix cm = new ConfusionMatrix(outFinal, outputsTest);
         cm.writeClassErrorMatrix("results/confusion_matrix.data");

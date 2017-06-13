@@ -1,4 +1,4 @@
-package iad.mlp.utlis;
+package iad.mlp.utils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -1,4 +1,4 @@
-package iad.mlp.utlis;
+package iad.mlp.utils;
 
 import java.util.ArrayList;
 import java.util.Collections;

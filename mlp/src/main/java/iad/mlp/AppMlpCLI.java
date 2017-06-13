@@ -3,8 +3,8 @@ package iad.mlp;
 import iad.mlp.actfun.ActivationFunction;
 import iad.mlp.actfun.Sigmoidal;
 import iad.mlp.mlp.MultiLayerPerceptron;
-import iad.mlp.utlis.IOUtils;
-import iad.mlp.utlis.MLPUtils;
+import iad.mlp.utils.IOUtils;
+import iad.mlp.utils.MLPUtils;
 import org.apache.commons.cli.*;
 
 import java.io.File;
