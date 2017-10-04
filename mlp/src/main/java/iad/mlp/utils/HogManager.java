@@ -10,7 +10,8 @@ import org.opencv.objdetect.HOGDescriptor;
 public class HogManager {
 
     static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        nu.pattern.OpenCV.loadShared();
+        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
     }
 
     private static double[] exportImgFeatures(double[] data, int rows, int cols) {

@@ -39,7 +39,6 @@ class AppMlpCLI {
         double[][] outFinal = new double[inputs.length][];
         for (int i = 0; i < inputs.length; i++) {
             outFinal[i] = mlp.execute(inputs[i]);
-            IOUtils.writeMLPData("results/mlp" + i + ".data", mlp);
         }
         double[] error = MLPUtils.calcError(outFinal, outputs);
 

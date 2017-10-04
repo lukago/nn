@@ -17,18 +17,6 @@ public final class IOUtils {
     private IOUtils() {
     }
 
-
-    public static void writeMLPData(String filepath, MultiLayerPerceptron mlp) {
-        Layer[] layers = mlp.getLayers();
-        try (FileWriter ostream = new FileWriter(filepath)) {
-            for (Layer layer : layers) {
-                ostream.write(layer.toString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void writeVector(String filepath, double[] values) {
         try (FileWriter ostream = new FileWriter(filepath)) {
             for (int i = 0; i < values.length; i++) {

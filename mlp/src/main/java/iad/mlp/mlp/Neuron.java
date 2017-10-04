@@ -24,15 +24,4 @@ public class Neuron implements Serializable {
             weights[i] = random.nextGaussian() / gaussDiv;
         }
     }
-
-    @Override
-    public String toString() {
-        StringBuilder ret = new StringBuilder("Weights: ");
-        for (double i : weights) {
-            ret.append(i).append(" ");
-        }
-        ret.append("\nValue: ").append(value);
-        return ret.toString();
-    }
-
 }

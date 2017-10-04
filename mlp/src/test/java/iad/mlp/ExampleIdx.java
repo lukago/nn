@@ -66,7 +66,7 @@ public class ExampleIdx {
         mlp.setCmPerEpoch(cmPerEpoch);
 
         System.out.println(inputs.length);
-        System.out.println(inputs[inputs.length/2].length);
+        System.out.println(inputs[inputs.length / 2].length);
         long startTime = System.currentTimeMillis();
         mlp.learn(epochs, inputs, outputs);
         long endTime = System.currentTimeMillis();
@@ -107,8 +107,8 @@ public class ExampleIdx {
     }
 
     static void initData() {
-        String inImage = "data/t10k-images.idx3-ubyte";
-        String inLabel = "data/t10k-labels.idx1-ubyte";
+        String inImage = "data/t10k-images-idx3-ubyte";
+        String inLabel = "data/t10k-labels-idx1-ubyte";
         try (IdxManager idx = new IdxManager(inImage, inLabel)) {
             idx.load();
             IOUtils.serialize(idx, "data/idx-test.ser");
@@ -116,8 +116,8 @@ public class ExampleIdx {
             e.printStackTrace();
         }
 
-        String inImage2 = "data/train-images.idx3-ubyte";
-        String inLabel2 = "data/train-labels.idx1-ubyte";
+        String inImage2 = "data/train-images-idx3-ubyte";
+        String inLabel2 = "data/train-labels-idx1-ubyte";
         try (IdxManager idx = new IdxManager(inImage2, inLabel2)) {
             idx.load();
             IOUtils.serialize(idx, "data/idx.ser");
